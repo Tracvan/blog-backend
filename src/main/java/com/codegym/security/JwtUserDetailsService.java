@@ -1,6 +1,5 @@
 package com.codegym.security;
 
-
 import com.codegym.model.Role;
 import com.codegym.model.User;
 import com.codegym.repository.IUserRepository;
@@ -24,11 +23,11 @@ public class JwtUserDetailsService implements UserDetailsService {
     private IUserRepository userRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findUserByUsername(username);
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        User user = userRepository.findUserByEmail(email); // Tìm kiếm người dùng bằng email
 
         if (user == null) {
-            throw new UsernameNotFoundException("User " + username + "was not found in database!");
+            throw new UsernameNotFoundException("User with email " + email + " was not found in database!");
         }
 
         Set<Role> roles = user.getRoles();
@@ -40,7 +39,7 @@ public class JwtUserDetailsService implements UserDetailsService {
         }
 
         UserDetails userDetails = new org.springframework.security.core.userdetails.User(
-                user.getUsername(),
+                user.getEmail(), // Sử dụng email thay vì username
                 user.getPassword(),
                 grantedAuthorities);
 
