@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 
+
 @CrossOrigin(value = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/auth")
@@ -44,6 +45,7 @@ public class AuthController {
                     loginRequest.getPassword()));
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
+
             String token = tokenProvider.generateToken(authentication);
             return new ResponseEntity<>(new LoginResponse("Login success!", token), HttpStatus.OK);
         } catch (Exception e) {
