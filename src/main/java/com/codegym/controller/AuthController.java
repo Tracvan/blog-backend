@@ -44,8 +44,6 @@ public class AuthController {
                     loginRequest.getPassword()));
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
-
-            // Gọi hàm tạo Token
             String token = tokenProvider.generateToken(authentication);
             return new ResponseEntity<>(new LoginResponse("Login success!", token), HttpStatus.OK);
         } catch (Exception e) {
