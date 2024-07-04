@@ -10,5 +10,7 @@ public interface IUserService {
     User getUserById(Long userId);
     void save(User user);
     void remove(Long id);
+    User findByUserName(String username);
+    String generateNewPassword();
 
 }

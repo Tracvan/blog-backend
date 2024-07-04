@@ -1,15 +1,8 @@
 package com.codegym.controller;
-import com.codegym.model.Role;
-import com.codegym.model.User;
 import com.codegym.payload.request.LoginRequest;
-import com.codegym.payload.request.RegisterRequest;
 import com.codegym.payload.response.ForbiddenResponse;
 import com.codegym.payload.response.LoginResponse;
-import com.codegym.payload.response.RegisterResponse;
-import com.codegym.repository.IUserRepository;
-import com.codegym.repository.RoleRepository;
 import com.codegym.security.JwtTokenProvider;
-import com.codegym.service.IUserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Collections;
 
 
 @CrossOrigin(value = "*", maxAge = 3600)
@@ -53,7 +45,6 @@ public class AuthController {
                     loginRequest.getPassword()));
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
-
 
             String token = tokenProvider.generateToken(authentication);
             return new ResponseEntity<>(new LoginResponse("Login success!", token), HttpStatus.OK);
