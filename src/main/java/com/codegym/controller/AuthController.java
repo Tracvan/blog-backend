@@ -1,3 +1,4 @@
+
 package com.codegym.controller;
 import com.codegym.payload.request.LoginRequest;
 import com.codegym.payload.response.ForbiddenResponse;
@@ -59,4 +60,3 @@ public class AuthController {
         return new ResponseEntity<>(new ForbiddenResponse("Unauthorized access!"), HttpStatus.FORBIDDEN);
     }
 }
-
