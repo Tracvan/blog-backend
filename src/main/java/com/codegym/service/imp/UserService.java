@@ -3,6 +3,7 @@ package com.codegym.service.imp;
 import com.codegym.model.User;
 
 import com.codegym.model.dto.UserDTO;
+import com.codegym.model.dto.UserDetailDTO;
 import com.codegym.repository.IUserRepository;
 import com.codegym.repository.InfoUserRepository;
 import com.codegym.service.IUserService;
@@ -63,6 +64,11 @@ public class UserService implements IUserService {
     public List<UserDTO> getAllUsers() {
         return infoUserRepository.findAllUsers();
     }
+    @Override
+    public UserDetailDTO getUserDetailById(Long id) {
+        return infoUserRepository.findUserDetailById(id);
+    }
+
 
     @Override
     public void lockUser(Long id) {

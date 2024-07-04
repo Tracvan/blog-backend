@@ -87,7 +87,7 @@ public class SecurityConfiguration {
                         .requestMatchers("/api/admin/**").permitAll()
                         .anyRequest().authenticated());
 
-        // Use JwtAuthorizationFilter to check token -> get user info
+
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }

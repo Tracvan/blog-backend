@@ -1,6 +1,7 @@
 package com.codegym.controller;
 
 import com.codegym.model.dto.UserDTO;
+import com.codegym.model.dto.UserDetailDTO;
 import com.codegym.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -36,10 +37,14 @@ public class AdminController {
         return ResponseEntity.ok("User unlocked successfully");
     }
 
-    // Xóa tài khoản người dùng
     @DeleteMapping("/users/{id}")
     public ResponseEntity<String> deleteUser(@PathVariable Long id) {
         userService.remove(id);
         return ResponseEntity.ok("User deleted successfully");
+    }
+    @GetMapping("/users/{id}")
+    public ResponseEntity<UserDetailDTO> getUserDetailById(@PathVariable Long id) {
+        UserDetailDTO userDetail = userService.getUserDetailById(id);
+        return ResponseEntity.ok(userDetail);
     }
 }
