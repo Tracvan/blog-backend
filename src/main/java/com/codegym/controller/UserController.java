@@ -3,6 +3,7 @@ package com.codegym.controller;
 import com.codegym.model.Email;
 import com.codegym.model.Role;
 import com.codegym.model.User;
+import com.codegym.model.dto.UpdatePasswordRequest;
 import com.codegym.payload.request.RegisterRequest;
 import com.codegym.payload.response.RegisterResponse;
 import com.codegym.repository.IUserRepository;
@@ -19,6 +20,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 
 @CrossOrigin(value = "*", maxAge = 3600)
@@ -41,13 +44,14 @@ public class UserController {
 
     @Autowired
     JwtTokenProvider tokenProvider;
+
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@Valid @RequestBody RegisterRequest registerRequest) {
-        if(userRepository.existsByUsername(registerRequest.getUsername())) {
+        if (userRepository.existsByUsername(registerRequest.getUsername())) {
             return new ResponseEntity<>(new RegisterResponse("Username is already taken!"), HttpStatus.BAD_REQUEST);
         }
 
-        if(userRepository.existsByEmail(registerRequest.getEmail())) {
+        if (userRepository.existsByEmail(registerRequest.getEmail())) {
             return new ResponseEntity<>(new RegisterResponse("Email Address already in use!"), HttpStatus.BAD_REQUEST);
         }
 
@@ -62,8 +66,9 @@ public class UserController {
 
         return ResponseEntity.ok(new RegisterResponse("User registered successfully"));
     }
+
     @GetMapping("users/{username}")
-    public ResponseEntity<?> getUserByUserName(@PathVariable("username") String username){
+    public ResponseEntity<?> getUserByUserName(@PathVariable("username") String username) {
         User user = userService.findByUserName(username);
         if (user != null) {
             return ResponseEntity.ok(user);
@@ -71,24 +76,30 @@ public class UserController {
             return ResponseEntity.notFound().build();
         }
     }
+
     @GetMapping("users/changepw/{username}")
-    public ResponseEntity<?> changePassword(@PathVariable("username") String username){
+    public ResponseEntity<?> changePassword(@PathVariable("username") String username) {
         User user = userService.findByUserName(username);
-        String usname = user.getUsername();
-        String userEmail = user.getEmail();
-        if(user != null){
-           String newPassword =  userService.generateNewPassword();
-           String encodedPassword = passwordEncoder.encode(newPassword);
-           User changedPasswordUser = new User(user.getId(),usname, userEmail,encodedPassword, user.getRoles() );
-           userRepository.save(changedPasswordUser);
+        if (user == null) {
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", "User not found");
+            errorResponse.put("message", "The username '" + username + "' does not exist in our database.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+        } else {
+            String usname = user.getUsername();
+            String userEmail = user.getEmail();
+            String newPassword = userService.generateNewPassword();
+            String encodedPassword = passwordEncoder.encode(newPassword);
+            User changedPasswordUser = new User(user.getId(), usname, userEmail, encodedPassword, user.getRoles());
+            userRepository.save(changedPasswordUser);
             Email email = new Email(user.getEmail(),
                     "Your New Password for BLOG ",
                     "Dear Mr/Ms <b> " + user.getUsername() + "</b>" +
                             "\n" +
                             "We're excited to welcome you to BLOG! To ensure your account is secure, we've generated a new password for you:" + "\n" +
                             "\n" +
-                            "New Password: " + newPassword +"\n" +
-                            "\n"+
+                            "New Password: " + newPassword + "\n" +
+                            "\n" +
                             "We highly recommend changing this password to something unique and memorable to you. You can easily do this by following these steps:\n" +
                             "\n" +
                             "1. Log in to your account using your email address and the new password provided above.\n" +
@@ -115,8 +126,15 @@ public class UserController {
 
             emailService.sendSimpleEmail(email.getTo(), email.getSubject(), email.getText());
             return ResponseEntity.ok(encodedPassword);
-        }else {
-            return ResponseEntity.notFound().build();
+        }
+    }
+    @PutMapping("/update-password")
+    public ResponseEntity<?> updatePassword(@RequestBody UpdatePasswordRequest request){
+        boolean isChanged = userService.changePassword(request);
+        if(isChanged){
+             return ResponseEntity.ok().body("Password changed successfully");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("failed to change password");
         }
     }
 }

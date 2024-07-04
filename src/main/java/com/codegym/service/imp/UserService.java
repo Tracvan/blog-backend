@@ -1,18 +1,29 @@
 package com.codegym.service.imp;
 
 import com.codegym.model.User;
+import com.codegym.model.dto.UpdatePasswordRequest;
 import com.codegym.repository.IUserRepository;
 import com.codegym.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import java.util.List;
 import java.util.Random;
 
 @Service
 public class UserService implements IUserService {
+    private final PasswordEncoder passwordEncoder;
+
+
     @Autowired
     IUserRepository userRepository;
+
+    public UserService(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Override
     public List<User> getUsers() {
@@ -55,6 +66,21 @@ public class UserService implements IUserService {
         }
 
         return sb.toString();
+    }
+
+    @Override
+    public boolean changePassword(UpdatePasswordRequest request) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        if (username != null){
+            User user = userRepository.findUserByUsername(username);
+            if(passwordEncoder.matches(request.getCurrentPassword(), user.getPassword())){
+                user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+                userRepository.save(user);
+                return true;
+            }
+        }
+        return false;
     }
 }
 
