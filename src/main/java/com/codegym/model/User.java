@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.Set;
 
 @Data
@@ -18,14 +19,17 @@ public class User {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(nullable = false ,unique=true)
+    @Column(nullable = false, unique = true)
     private String username;
 
-    @Column(nullable = false ,unique=true)
+    @Column(nullable = false, unique = true)
     private String email;
 
     @Column(nullable = false)
     private String password;
+
+    @Column(nullable = false)
+    private LocalDate date;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -34,9 +38,10 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
 
-    public User(String username, String email, String password) {
+    public User(String username, String email, String password, LocalDate date) {
         this.username = username;
         this.email = email;
         this.password = password;
+        this.date = date;
     }
 }
