@@ -1,10 +1,13 @@
 package com.codegym.model.dto;
 
+import java.time.LocalDate;
+
 public class UserDetailDTO {
     private Long id;
     private String username;
     private String email;
     private String avatar;
+    private LocalDate date;
     private String fullName;
     private String address;
     private String phoneNumber;
@@ -13,7 +16,7 @@ public class UserDetailDTO {
 
     public UserDetailDTO() {}
 
-    public UserDetailDTO(Long id, String username, String email, String avatar, String fullName, String address, String phoneNumber, String status) {
+    public UserDetailDTO(Long id, String username, String email, String avatar, LocalDate date, String fullName, String address, String phoneNumber, String status) {
         this.id = id;
         this.username = username;
         this.email = email;
@@ -22,6 +25,7 @@ public class UserDetailDTO {
         this.address = address;
         this.phoneNumber = phoneNumber;
         this.status = status;
+        this.date = date;
     }
 
     public Long getId() {
@@ -86,5 +90,13 @@ public class UserDetailDTO {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
     }
 }

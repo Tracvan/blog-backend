@@ -34,6 +34,6 @@ public interface InfoUserRepository extends JpaRepository<InfoUser, Long> {
     @Query("DELETE FROM InfoUser i WHERE i.user.id = :id")
     void deleteUserById(Long id);
 
-    @Query("SELECT new com.codegym.model.dto.UserDetailDTO(i.user.id, i.user.username, i.user.email, i.avatar, i.fullName, i.address, i.phonenumber, i.status) FROM InfoUser i WHERE i.user.id = :id")
+    @Query("SELECT new com.codegym.model.dto.UserDetailDTO(i.user.id, i.user.username, i.user.email, i.avatar, i.user.date, i.fullName, i.address, i.phonenumber, i.status) FROM InfoUser i WHERE i.user.id = :id")
     UserDetailDTO findUserDetailById(Long id);
 }
