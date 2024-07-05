@@ -82,8 +82,11 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/register").permitAll()
                         .requestMatchers("/api/auth/login").permitAll()
+                        .requestMatchers("/api/auth/logout").permitAll()
                         .requestMatchers("/api/users/*").permitAll()
                         .requestMatchers("/api/users/**").permitAll()
+                        .requestMatchers("/api/users").permitAll()
+
                         .anyRequest().authenticated());
 
         // Use JwtAuthorizationFilter to check token -> get user info

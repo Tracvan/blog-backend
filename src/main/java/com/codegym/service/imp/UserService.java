@@ -82,6 +82,11 @@ public class UserService implements IUserService {
         }
         return false;
     }
+
+    @Override
+    public User findByEmail(String email) {
+        return userRepository.findUserByEmail(email);
+    }
 }
 
 

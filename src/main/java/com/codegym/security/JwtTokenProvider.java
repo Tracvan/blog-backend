@@ -40,7 +40,7 @@ public class JwtTokenProvider {
     }
 
     //claims: gia tri nhan lai
-    public String getUsernameFromJWT(String token) {
+    public String getUsernameOrEmailFromJWT(String token) {
         Claims claims = Jwts.parser()
                 .setSigningKey(jwtSecret)
                 .parseClaimsJws(token)

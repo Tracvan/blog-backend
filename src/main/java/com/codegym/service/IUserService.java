@@ -14,5 +14,6 @@ public interface IUserService {
     User findByUserName(String username);
     String generateNewPassword();
     boolean changePassword(UpdatePasswordRequest request);
+    User findByEmail(String email);
 
 }
