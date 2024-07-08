@@ -2,7 +2,11 @@ package com.codegym.service.imp;
 
 import com.codegym.model.User;
 import com.codegym.model.dto.UpdatePasswordRequest;
+
+import com.codegym.model.dto.UserDTO;
+import com.codegym.model.dto.UserDetailDTO;
 import com.codegym.repository.IUserRepository;
+import com.codegym.repository.InfoUserRepository;
 import com.codegym.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -12,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService implements IUserService {
@@ -20,6 +25,9 @@ public class UserService implements IUserService {
 
     @Autowired
     IUserRepository userRepository;
+
+    @Autowired
+    private InfoUserRepository infoUserRepository;
 
     public UserService(PasswordEncoder passwordEncoder) {
         this.passwordEncoder = passwordEncoder;
@@ -66,6 +74,26 @@ public class UserService implements IUserService {
         }
 
         return sb.toString();
+    }
+
+    @Override
+    public List<UserDTO> getAllUsers() {
+        return infoUserRepository.findAllUsers();
+    }
+    @Override
+    public UserDetailDTO getUserDetailById(Long id) {
+        return infoUserRepository.findUserDetailById(id);
+    }
+
+
+    @Override
+    public void lockUser(Long id) {
+        infoUserRepository.lockUserById(id);
+    }
+
+    @Override
+    public void unlockUser(Long id) {
+        infoUserRepository.unlockUserById(id);
     }
 
     @Override

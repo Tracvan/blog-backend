@@ -1,3 +1,4 @@
+
 package com.codegym.controller;
 
 import com.codegym.payload.request.LoginRequest;
@@ -69,4 +70,3 @@ public class AuthController {
         }
     }
 }
-
