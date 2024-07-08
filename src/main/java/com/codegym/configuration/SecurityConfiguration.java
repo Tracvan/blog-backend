@@ -84,9 +84,11 @@ public class SecurityConfiguration {
                         .requestMatchers("/api/auth/login").permitAll()
                         .requestMatchers("/api/auth/logout").permitAll()
                         .requestMatchers("/api/users/**").permitAll()
-                        .requestMatchers("/api/admin/**").permitAll()
+
                         .requestMatchers("/api/user/**").permitAll()
-//                        .requestMatchers("/api/users/**").permitAll()
+                        .requestMatchers("/api/admin/**").permitAll()
+                        .requestMatchers("/api/info/**").permitAll()
+                        .requestMatchers("/api/search/**").permitAll()
 
                         .anyRequest().authenticated());
 

@@ -23,6 +23,7 @@ public class InfoUser {
     private String createdAt;
     private String avatar;
     private String fullName;
+
     private String address;
     private String phonenumber;
     private String status;

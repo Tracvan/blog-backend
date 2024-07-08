@@ -1,10 +1,14 @@
+
 package com.codegym.service.imp;
 
+import com.codegym.model.InfoUser;
 import com.codegym.model.User;
+
 import com.codegym.model.dto.UpdatePasswordRequest;
 
 import com.codegym.model.dto.UserDTO;
 import com.codegym.model.dto.UserDetailDTO;
+
 import com.codegym.repository.IUserRepository;
 import com.codegym.repository.InfoUserRepository;
 import com.codegym.service.IUserService;
@@ -29,6 +33,7 @@ public class UserService implements IUserService {
     @Autowired
     private InfoUserRepository infoUserRepository;
 
+
     public UserService(PasswordEncoder passwordEncoder) {
         this.passwordEncoder = passwordEncoder;
     }
@@ -48,10 +53,6 @@ public class UserService implements IUserService {
         userRepository.save(user);
     }
 
-    @Override
-    public void remove(Long id) {
-        userRepository.deleteById(id);
-    }
 
     @Override
     public User findByUserName(String username) {
@@ -63,7 +64,6 @@ public class UserService implements IUserService {
         String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         Random random = new Random();
 
-        // Chọn độ dài ngẫu nhiên từ 6 đến 8
         int length = random.nextInt(3) + 6;
 
         StringBuilder sb = new StringBuilder(length);
@@ -118,4 +118,34 @@ public class UserService implements IUserService {
 }
 
 
+    @Override
+    public List<UserDTO> getAllUsers() {
+        return infoUserRepository.findAllUsers();
+    }
 
+    @Override
+    public void lockUser(Long id) {
+        infoUserRepository.lockUserById(id);
+    }
+
+    @Override
+    public void unlockUser(Long id) {
+        infoUserRepository.unlockUserById(id);
+    }
+
+
+    @Override
+    public void remove(Long id) {
+        infoUserRepository.deleteUserById(id);
+    }
+    @Override
+    public InfoUser getInfoUser(Long id){
+       return infoUserRepository.getReferenceById(id);
+
+    }
+
+    @Override
+    public List<User> searchUsers(String query) {
+        return userRepository.findUserByUsernameContaining(query);
+    }
+}

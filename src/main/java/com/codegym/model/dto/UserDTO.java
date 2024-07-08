@@ -1,5 +1,6 @@
 package com.codegym.model.dto;
 
+
 import java.time.LocalDate;
 
 public class UserDTO {
@@ -38,12 +39,14 @@ public class UserDTO {
         this.username = username;
     }
 
+
     public LocalDate getDate() {
         return date;
     }
 
     public void setDate(LocalDate date) {
         this.date = date;
+
     }
 
     public String getAvatar() {
@@ -69,4 +72,4 @@ public class UserDTO {
     public void setStatus(String status) {
         this.status = status;
     }
-}
+
