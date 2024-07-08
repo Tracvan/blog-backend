@@ -76,6 +76,7 @@ public class UserService implements IUserService {
         infoUserRepository.unlockUserById(id);
     }
 
+
     @Override
     public void remove(Long id) {
         infoUserRepository.deleteUserById(id);
@@ -84,5 +85,10 @@ public class UserService implements IUserService {
     public InfoUser getInfoUser(Long id){
        return infoUserRepository.getReferenceById(id);
 
+    }
+
+    @Override
+    public List<User> searchUsers(String query) {
+        return userRepository.findUserByUsernameContaining(query);
     }
 }

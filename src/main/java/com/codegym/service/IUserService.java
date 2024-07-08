@@ -20,5 +20,5 @@ public interface IUserService {
     void lockUser(Long id);
     void unlockUser(Long id);
 
-
+    List<User> searchUsers(String query);
 }

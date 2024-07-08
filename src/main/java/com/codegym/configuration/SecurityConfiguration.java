@@ -87,6 +87,7 @@ public class SecurityConfiguration {
                         .requestMatchers("/api/user/**").permitAll()
                         .requestMatchers("/api/admin/**").permitAll()
                         .requestMatchers("/api/info/**").permitAll()
+                        .requestMatchers("/api/search/**").permitAll()
                         .anyRequest().authenticated());
 
         // Use JwtAuthorizationFilter to check token -> get user info
