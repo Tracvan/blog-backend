@@ -4,6 +4,7 @@ import com.codegym.model.dto.UserDetailDTO;
 import com.codegym.model.Email;
 import com.codegym.model.Role;
 import com.codegym.model.User;
+import com.codegym.model.dto.UpdatePasswordRequest;
 import com.codegym.payload.request.RegisterRequest;
 import com.codegym.payload.response.RegisterResponse;
 import com.codegym.repository.IUserRepository;
@@ -12,6 +13,7 @@ import com.codegym.security.JwtTokenProvider;
 import com.codegym.service.IUserService;
 import com.codegym.service.imp.EmailService;
 import jakarta.validation.Valid;
+import org.eclipse.angus.mail.iap.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,15 +22,16 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
 
 @CrossOrigin(value = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/")
 public class UserController {
-
     @Autowired
     private EmailService emailService;
-
     @Autowired
     private IUserService userService;
 
@@ -43,7 +46,6 @@ public class UserController {
 
     @Autowired
     JwtTokenProvider tokenProvider;
-
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@Valid @RequestBody RegisterRequest registerRequest) {
         if(userRepository.existsByUsername(registerRequest.getUsername())) {
@@ -55,19 +57,48 @@ public class UserController {
         }
 
         LocalDate now = LocalDate.now();
-        User user = new User(registerRequest.getUsername(),
+        User user = new User(
+                registerRequest.getUsername(),
                 registerRequest.getEmail(),
                 passwordEncoder.encode(registerRequest.getPassword()),
-                now);
+                now
+                );
 
         Role userRole = roleRepository.findByName("ROLE_USER").orElseThrow(() -> new RuntimeException("Error: Role is not found."));
         user.setRoles(Collections.singleton(userRole));
 
         userService.save(user);
+        Email email = new Email(user.getEmail(),
+                "Welcome to the Blogosphere, " +user.getUsername() + "! ",
+                "Hey " + user.getUsername() +
+                        "\n" +
+                        "Welcome to the blogosphere! We're thrilled to have you join our community of passionate writers and readers." +
+                        "\n" +
+                        "We know that starting a new blog can be exciting and a little daunting at the same time. But don't worry, we're here to help you every step of the way." +
+                        "Here are a few things you can do to get started:\n" +
+                        "\n" +
+                        "1. Explore the blog: Take some time to browse through our posts and get a feel for the kind of content we publish. You'll find a wide variety of topics, from personal stories and travelogues to insightful essays and creative writing.\n" +
+                        "2. Join the conversation: Leave comments on our posts and share your thoughts and opinions. We love hearing from our readers and fostering a vibrant and engaging community.\n" +
+                        "3 .Connect with other bloggers: Follow other bloggers you enjoy reading, and reach out to them through comments or social media. Building relationships with other bloggers can be a great way to learn and grow.\n" +
+                        "4. Start writing! The best way to get started is to simply start writing. Share your unique voice and perspective with the world. Don't be afraid to experiment and find your own style.\n" +
+                        "We're confident that you'll find our blog to be a valuable resource and a platform to share your creativity with the world.\n" +
+                        "\n" +
+                        "Here are some additional resources that you may find helpful:\n" +
+                        "\n" +
+                        "Getting Started Guide: [link to guide]\n" +
+                        "FAQ: [link to FAQ]\n" +
+                        "Community Guidelines: [link to guidelines]\n" +
+                        "We're so glad you're here,"+ user.getUsername() +"! We're looking forward to reading your posts and getting to know you better.\n" +
+                        "\n" +
+                        "Happy blogging!\n" +
+                        "\n" +
+                        "The BLOG Team\n" +
+                        "\n" +
+                        "P.S. We're also running a special welcome offer for new bloggers. Use code WELCOME to get 10% off your first blog design package.");
+        emailService.sendSimpleEmail(email.getTo(), email.getSubject(), email.getText());
 
         return ResponseEntity.ok(new RegisterResponse("User registered successfully"));
     }
-
     @GetMapping("users/{username}")
     public ResponseEntity<?> getUserByUserName(@PathVariable("username") String username){
         User user = userService.findByUserName(username);
@@ -77,28 +108,39 @@ public class UserController {
             return ResponseEntity.notFound().build();
         }
     }
-
-    @GetMapping("users/changepw/{username}")
-    public ResponseEntity<?> changePassword(@PathVariable("username") String username) {
-        User user = userService.findByUserName(username);
+    @GetMapping("/user/{id}")
+    public ResponseEntity<?> getUserByUserName(@PathVariable("id") Long id ) {
+        User user = userService.getUserById(id);
         if (user != null) {
+            return ResponseEntity.ok(user);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("users/getpassword/{username}")
+    public ResponseEntity<?> changePassword(@PathVariable("username") String username ) {
+        User user = userService.findByUserName(username);
+        if (user == null) {
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", "User not found");
+            errorResponse.put("message", "The username '" + user.getUsername() + "' does not exist in our database.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+        } else {
             String usname = user.getUsername();
             String userEmail = user.getEmail();
             String newPassword = userService.generateNewPassword();
             String encodedPassword = passwordEncoder.encode(newPassword);
-
-            User changedPasswordUser = new User(user.getId(), usname, userEmail, encodedPassword, user.getDate(), user.getRoles());
-
+            User changedPasswordUser = new User(user.getId(), usname, userEmail, encodedPassword, user.getRoles());
             userRepository.save(changedPasswordUser);
-
             Email email = new Email(user.getEmail(),
                     "Your New Password for BLOG ",
                     "Dear Mr/Ms <b> " + user.getUsername() + "</b>" +
                             "\n" +
                             "We're excited to welcome you to BLOG! To ensure your account is secure, we've generated a new password for you:" + "\n" +
                             "\n" +
-                            "New Password: " + newPassword + "\n" +
-                            "\n" +
+                            "New Password: " + newPassword +"\n" +
+                            "\n"+
                             "We highly recommend changing this password to something unique and memorable to you. You can easily do this by following these steps:\n" +
                             "\n" +
                             "1. Log in to your account using your email address and the new password provided above.\n" +
@@ -124,11 +166,16 @@ public class UserController {
                             "P.S. We'd love to hear from you! If you have any feedback or suggestions, please feel free to reply to this email or reach out to us on social media");
 
             emailService.sendSimpleEmail(email.getTo(), email.getSubject(), email.getText());
-
             return ResponseEntity.ok(encodedPassword);
-        } else {
-            return ResponseEntity.notFound().build();
         }
     }
-
+    @PutMapping("/update-password")
+    public ResponseEntity<?> updatePassword(@RequestBody UpdatePasswordRequest request){
+        boolean isChanged = userService.changePassword(request);
+        if(isChanged){
+             return ResponseEntity.ok().body("Password changed successfully");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("failed to change password");
+        }
+    }
 }
