@@ -83,9 +83,9 @@ public class SecurityConfiguration {
                         .requestMatchers("/api/register").permitAll()
                         .requestMatchers("/api/auth/login").permitAll()
                         .requestMatchers("/api/auth/logout").permitAll()
-                        .requestMatchers("/api/users/*").permitAll()
                         .requestMatchers("/api/users/**").permitAll()
-                        .requestMatchers("/api/users").permitAll()
+                        .requestMatchers("/api/user/**").permitAll()
+//                        .requestMatchers("/api/users/**").permitAll()
 
                         .anyRequest().authenticated());
 

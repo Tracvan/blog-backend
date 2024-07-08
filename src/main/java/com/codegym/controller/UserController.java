@@ -103,6 +103,15 @@ public class UserController {
             return ResponseEntity.notFound().build();
         }
     }
+    @GetMapping("/user/{id}")
+    public ResponseEntity<?> getUserByUserName(@PathVariable("id") Long id ) {
+        User user = userService.getUserById(id);
+        if (user != null) {
+            return ResponseEntity.ok(user);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 
     @GetMapping("users/getpassword/{username}")
     public ResponseEntity<?> changePassword(@PathVariable("username") String username ) {
