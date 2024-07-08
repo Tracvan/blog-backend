@@ -4,24 +4,39 @@ package com.codegym.service.imp;
 import com.codegym.model.InfoUser;
 import com.codegym.model.User;
 
+import com.codegym.model.dto.UpdatePasswordRequest;
+
 import com.codegym.model.dto.UserDTO;
+import com.codegym.model.dto.UserDetailDTO;
+
 import com.codegym.repository.IUserRepository;
 import com.codegym.repository.InfoUserRepository;
 import com.codegym.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
 @Service
 public class UserService implements IUserService {
+    private final PasswordEncoder passwordEncoder;
+
+
     @Autowired
     IUserRepository userRepository;
 
     @Autowired
     private InfoUserRepository infoUserRepository;
+
+
+    public UserService(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Override
     public List<User> getUsers() {
@@ -60,6 +75,48 @@ public class UserService implements IUserService {
 
         return sb.toString();
     }
+
+    @Override
+    public List<UserDTO> getAllUsers() {
+        return infoUserRepository.findAllUsers();
+    }
+    @Override
+    public UserDetailDTO getUserDetailById(Long id) {
+        return infoUserRepository.findUserDetailById(id);
+    }
+
+
+    @Override
+    public void lockUser(Long id) {
+        infoUserRepository.lockUserById(id);
+    }
+
+    @Override
+    public void unlockUser(Long id) {
+        infoUserRepository.unlockUserById(id);
+    }
+
+    @Override
+    public boolean changePassword(UpdatePasswordRequest request) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        if (username != null){
+            User user = userRepository.findUserByUsername(username);
+            if(passwordEncoder.matches(request.getCurrentPassword(), user.getPassword())){
+                user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+                userRepository.save(user);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public User findByEmail(String email) {
+        return userRepository.findUserByEmail(email);
+    }
+}
+
 
     @Override
     public List<UserDTO> getAllUsers() {

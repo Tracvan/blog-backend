@@ -82,12 +82,14 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/register").permitAll()
                         .requestMatchers("/api/auth/login").permitAll()
-                        .requestMatchers("/api/users/*").permitAll()
+                        .requestMatchers("/api/auth/logout").permitAll()
                         .requestMatchers("/api/users/**").permitAll()
+
                         .requestMatchers("/api/user/**").permitAll()
                         .requestMatchers("/api/admin/**").permitAll()
                         .requestMatchers("/api/info/**").permitAll()
                         .requestMatchers("/api/search/**").permitAll()
+
                         .anyRequest().authenticated());
 
         // Use JwtAuthorizationFilter to check token -> get user info
