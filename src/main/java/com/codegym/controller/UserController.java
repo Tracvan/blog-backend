@@ -1,5 +1,6 @@
 package com.codegym.controller;
 
+import com.codegym.model.dto.UserDTO;
 import com.codegym.model.dto.UserDetailDTO;
 import com.codegym.model.Email;
 import com.codegym.model.Role;
@@ -22,6 +23,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.Collections;
+import java.util.List;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -99,6 +102,8 @@ public class UserController {
 
         return ResponseEntity.ok(new RegisterResponse("User registered successfully"));
     }
+
+
     @GetMapping("users/{username}")
     public ResponseEntity<?> getUserByUserName(@PathVariable("username") String username){
         User user = userService.findByUserName(username);
@@ -118,8 +123,13 @@ public class UserController {
         }
     }
 
+    @GetMapping("/search/{username}")
+    public List<User> searchUsers(@PathVariable("username") String username) {
+        return userService.searchUsers(username);
+    }
+
     @GetMapping("users/getpassword/{username}")
-    public ResponseEntity<?> changePassword(@PathVariable("username") String username ) {
+    public ResponseEntity<?> changePassword(@PathVariable("username") String username) {
         User user = userService.findByUserName(username);
         if (user == null) {
             Map<String, String> errorResponse = new HashMap<>();
@@ -177,5 +187,22 @@ public class UserController {
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("failed to change password");
         }
+    }
+    @GetMapping("users")
+    public ResponseEntity<List<UserDTO>> getAllUsers() {
+        List<UserDTO> users = userService.getAllUsers();
+        return ResponseEntity.ok(users);
+    }
+
+    @PatchMapping("users/{id}/lock")
+    public ResponseEntity<Void> lockUserAccount(@PathVariable Long id) {
+        userService.lockUser(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("users/{id}/unlock")
+    public ResponseEntity<Void> unlockUserAccount(@PathVariable Long id) {
+        userService.unlockUser(id);
+        return ResponseEntity.noContent().build();
     }
 }

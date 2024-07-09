@@ -72,7 +72,6 @@ public class SecurityConfiguration {
         source.registerCorsConfiguration("/**", corsConfig);
         return source;
     }
-
     @Bean
     protected SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.cors(cors -> cors.configurationSource(corsConfigurationSource()))
@@ -87,7 +86,9 @@ public class SecurityConfiguration {
                         .requestMatchers("/api/admin/**").permitAll()
                         .requestMatchers("/api/user/**").permitAll()
                         .requestMatchers("/api/userdetail/**").permitAll()
-//                        .requestMatchers("/api/users/**").permitAll()
+                        .requestMatchers("/api/admin/**").permitAll()
+                        .requestMatchers("/api/info/**").permitAll()
+                        .requestMatchers("/api/search/**").permitAll()
 
                         .anyRequest().authenticated());
 

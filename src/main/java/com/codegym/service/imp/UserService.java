@@ -1,5 +1,6 @@
 package com.codegym.service.imp;
 
+import com.codegym.model.InfoUser;
 import com.codegym.model.User;
 import com.codegym.model.dto.UpdatePasswordRequest;
 
@@ -31,6 +32,11 @@ public class UserService implements IUserService {
 
     public UserService(PasswordEncoder passwordEncoder) {
         this.passwordEncoder = passwordEncoder;
+    }
+
+    @Override
+    public InfoUser getInfoUser(Long id) {
+        return null;
     }
 
     @Override
@@ -83,6 +89,11 @@ public class UserService implements IUserService {
     @Override
     public UserDetailDTO getUserDetailById(Long id) {
         return infoUserRepository.findUserDetailById(id);
+    }
+
+    @Override
+    public List<User> searchUsers(String query) {
+        return null;
     }
 
 

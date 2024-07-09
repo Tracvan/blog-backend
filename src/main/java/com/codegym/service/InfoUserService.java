@@ -5,4 +5,5 @@ import com.codegym.model.dto.UserDetailDTO;
 
 public interface InfoUserService {
     public UserDetailDTO findInforUserById(Long id);
+    public  void updateInfoUser(InfoUser infoUser);
 }

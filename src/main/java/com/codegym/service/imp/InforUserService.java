@@ -14,4 +14,9 @@ public class InforUserService implements InfoUserService {
     public UserDetailDTO findInforUserById(Long id) {
         return infoUserRepository.findUserDetailById(id);
     }
+
+    @Override
+    public void updateInfoUser(InfoUser infoUser) {
+        infoUserRepository.save(infoUser);
+    }
 }
