@@ -22,12 +22,12 @@ public interface InfoUserRepository extends JpaRepository<InfoUser, Long> {
     List<UserDTO> findAllUsers();
     @Modifying
     @Transactional
-    @Query("UPDATE InfoUser i SET i.status = 'Khóa' WHERE i.user.id = :id")
+    @Query("UPDATE InfoUser i SET i.status = 'Lock' WHERE i.user.id = :id")
     void lockUserById(Long id);
 
     @Modifying
     @Transactional
-    @Query("UPDATE InfoUser i SET i.status = 'Hoạt động' WHERE i.user.id = :id")
+    @Query("UPDATE InfoUser i SET i.status = 'Active' WHERE i.user.id = :id")
     void unlockUserById(Long id);
 
     @Modifying
