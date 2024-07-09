@@ -5,6 +5,7 @@ import com.codegym.model.dto.UserDetailDTO;
 import com.codegym.model.Email;
 import com.codegym.model.Role;
 import com.codegym.model.User;
+import com.codegym.model.dto.UserProfileUpdateDTO;
 import com.codegym.model.dto.UpdatePasswordRequest;
 import com.codegym.payload.request.RegisterRequest;
 import com.codegym.payload.response.RegisterResponse;
@@ -25,8 +26,10 @@ import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 
+
 import java.util.HashMap;
 import java.util.Map;
+
 
 
 @CrossOrigin(value = "*", maxAge = 3600)
@@ -194,6 +197,26 @@ public class UserController {
         return ResponseEntity.ok(users);
     }
 
+
+    @GetMapping("/users/profile/{userId}")
+    public ResponseEntity<UserProfileUpdateDTO> getUserProfileUpdateDTO(@PathVariable Long userId) {
+        UserProfileUpdateDTO userProfileUpdateDTO = userService.getUserProfileById(userId);
+        if (userProfileUpdateDTO != null) {
+            return ResponseEntity.ok(userProfileUpdateDTO);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @PutMapping("/users/profile/{userId}")
+    public ResponseEntity<?> updateUserProfile(@PathVariable Long userId, @Valid @RequestBody UserProfileUpdateDTO userProfileUpdateDTO) {
+        try {
+            userService.updateUserProfile(userId, userProfileUpdateDTO);
+            return ResponseEntity.ok(new RegisterResponse("User profile updated successfully"));
+        } catch (Exception e) {
+            return new ResponseEntity<>(new RegisterResponse("Error updating user profile"), HttpStatus.BAD_REQUEST);
+        }
+
     @PatchMapping("users/{id}/lock")
     public ResponseEntity<Void> lockUserAccount(@PathVariable Long id) {
         userService.lockUser(id);
@@ -204,5 +227,6 @@ public class UserController {
     public ResponseEntity<Void> unlockUserAccount(@PathVariable Long id) {
         userService.unlockUser(id);
         return ResponseEntity.noContent().build();
+
     }
 }

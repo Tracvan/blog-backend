@@ -6,6 +6,7 @@ import com.codegym.model.User;
 import com.codegym.model.dto.UpdatePasswordRequest;
 import com.codegym.model.dto.UserDTO;
 import com.codegym.model.dto.UserDetailDTO;
+import com.codegym.model.dto.UserProfileUpdateDTO;
 
 import java.util.List;
 import java.util.Optional;
@@ -28,6 +29,11 @@ public interface IUserService {
 
     UserDetailDTO getUserDetailById(Long id);
 
+    UserProfileUpdateDTO getUserProfileById(Long id);
+
+    void updateUserProfile(Long id, UserProfileUpdateDTO userProfileUpdateDTO);
+
 
     List<User> searchUsers(String query);
+
 }
