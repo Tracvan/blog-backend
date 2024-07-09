@@ -29,6 +29,7 @@ public class JwtUserDetailsService implements UserDetailsService {
         if(usernameOrEmail.contains("@")){
              user = userRepository.findUserByEmail(usernameOrEmail);
         }else{
+
             user = userRepository.findUserByUsername(usernameOrEmail);
         }
 

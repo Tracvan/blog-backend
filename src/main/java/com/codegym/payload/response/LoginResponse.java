@@ -1,9 +1,12 @@
 package com.codegym.payload.response;
 
 import jakarta.validation.constraints.NotBlank;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.lang.Nullable;
 
-
+@Getter
+@Setter
 public class LoginResponse {
 
     @NotBlank
@@ -11,30 +14,17 @@ public class LoginResponse {
 
     @Nullable
     private String token;
+    @Nullable
+    private String authorize;
 
     public LoginResponse() {
         super();
     }
 
-    public LoginResponse(@NotBlank String message, String token) {
+    public LoginResponse(@NotBlank String message, String token, String authorize) {
         super();
         this.message = message;
         this.token = token;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
+        this.authorize = authorize;
     }
 }
