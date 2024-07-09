@@ -1,9 +1,11 @@
 package com.codegym.service.imp;
 
+import com.codegym.model.InfoUser;
 import com.codegym.model.User;
 
 import com.codegym.model.dto.UserDTO;
 import com.codegym.model.dto.UserDetailDTO;
+import com.codegym.model.dto.UserProfileUpdateDTO;
 import com.codegym.repository.IUserRepository;
 import com.codegym.repository.InfoUserRepository;
 import com.codegym.service.IUserService;
@@ -70,6 +72,7 @@ public class UserService implements IUserService {
     }
 
 
+
     @Override
     public void lockUser(Long id) {
         infoUserRepository.lockUserById(id);
@@ -84,6 +87,25 @@ public class UserService implements IUserService {
     public void remove(Long id) {
         infoUserRepository.deleteUserById(id);
     }
+
+    @Override
+    public UserProfileUpdateDTO getUserProfileById(Long id) {return infoUserRepository.findInfoUserById(id);}
+
+    @Override
+    public void updateUserProfile(Long id, UserProfileUpdateDTO userProfileUpdateDTO) {
+        User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+        InfoUser infoUser = infoUserRepository.findById(id).orElseThrow(() -> new RuntimeException("InfoUser not found"));
+
+        user.setEmail(userProfileUpdateDTO.getEmail());
+        userRepository.save(user);
+
+        infoUser.setAvatar(userProfileUpdateDTO.getAvatar());
+        infoUser.setFullName(userProfileUpdateDTO.getFullName());
+        infoUser.setAddress(userProfileUpdateDTO.getAddress());
+        infoUser.setPhonenumber(userProfileUpdateDTO.getPhoneNumber());
+        infoUserRepository.save(infoUser);
+    }
+
 }
 
 

@@ -3,6 +3,7 @@ package com.codegym.service;
 import com.codegym.model.User;
 import com.codegym.model.dto.UserDTO;
 import com.codegym.model.dto.UserDetailDTO;
+import com.codegym.model.dto.UserProfileUpdateDTO;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,5 +20,9 @@ public interface IUserService {
     void unlockUser(Long id);
 
     UserDetailDTO getUserDetailById(Long id);
+
+    UserProfileUpdateDTO getUserProfileById(Long id);
+
+    void updateUserProfile(Long id, UserProfileUpdateDTO userProfileUpdateDTO);
 
 }
