@@ -34,7 +34,7 @@ import java.util.Map;
 
 @CrossOrigin(value = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/api/")
+@RequestMapping("/api")
 public class UserController {
     @Autowired
     private EmailService emailService;
@@ -216,14 +216,15 @@ public class UserController {
         } catch (Exception e) {
             return new ResponseEntity<>(new RegisterResponse("Error updating user profile"), HttpStatus.BAD_REQUEST);
         }
+    }
 
-    @PatchMapping("users/{id}/lock")
+    @PatchMapping("/users/{id}/lock")
     public ResponseEntity<Void> lockUserAccount(@PathVariable Long id) {
         userService.lockUser(id);
         return ResponseEntity.noContent().build();
     }
 
-    @PatchMapping("users/{id}/unlock")
+    @PatchMapping("/users/{id}/unlock")
     public ResponseEntity<Void> unlockUserAccount(@PathVariable Long id) {
         userService.unlockUser(id);
         return ResponseEntity.noContent().build();
