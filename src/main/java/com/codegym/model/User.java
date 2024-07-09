@@ -44,4 +44,18 @@ public class User {
         this.password = password;
         this.date = date;
     }
+
+    public User(Long id, String usname, String userEmail, String encodedPassword, Set<Role> roles) {
+        this.id = id;
+        this.username = usname;
+        this.email = userEmail;
+        this.password = encodedPassword;
+        this.roles = roles;
+    }
+
+    public User(String username, String email, String password) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+    }
 }

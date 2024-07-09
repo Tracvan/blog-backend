@@ -42,6 +42,7 @@ public class AdminController {
         userService.remove(id);
         return ResponseEntity.ok("User deleted successfully");
     }
+
     @GetMapping("/users/{id}")
     public ResponseEntity<UserDetailDTO> getUserDetailById(@PathVariable Long id) {
         UserDetailDTO userDetail = userService.getUserDetailById(id);

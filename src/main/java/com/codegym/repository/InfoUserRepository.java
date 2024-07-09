@@ -1,6 +1,5 @@
 package com.codegym.repository;
 
-
 import com.codegym.model.InfoUser;
 
 import com.codegym.model.dto.UserDetailDTO;
@@ -17,9 +16,10 @@ import java.util.List;
 @Repository
 public interface InfoUserRepository extends JpaRepository<InfoUser, Long> {
 
-    @Query("SELECT new com.codegym.model.dto.UserDTO(i.user.id, i.user.username, i.user.date, i.avatar, i.fullName, i.status) FROM InfoUser i")
-    List<UserDTO> findAllUsers();
 
+    @Query("SELECT new com.codegym.model.dto.UserDTO(i.user.id, i.user.username, i.user.date, i.avatar, i.fullName, i.status) FROM InfoUser i")
+
+    List<UserDTO> findAllUsers();
     @Modifying
     @Transactional
     @Query("UPDATE InfoUser i SET i.status = 'Khóa' WHERE i.user.id = :id")
@@ -41,3 +41,4 @@ public interface InfoUserRepository extends JpaRepository<InfoUser, Long> {
     @Query("SELECT new com.codegym.model.dto.UserProfileUpdateDTO(i.user.id, i.user.username, i.user.email, i.avatar, i.fullName, i.address, i.phonenumber) FROM InfoUser i WHERE i.user.id = :id")
     UserProfileUpdateDTO findInfoUserById(Long id);
 }
+
