@@ -28,7 +28,7 @@ public class InfoUserController {
                         .map(infoUser -> new UserDTO(
                                 user.getId(),
                                 user.getUsername(),
-                                infoUser.getCreatedAt(),
+                                infoUser.getUser().getDate(),
                                 infoUser.getAvatar(),
                                 infoUser.getFullName(),
                                 infoUser.getStatus()

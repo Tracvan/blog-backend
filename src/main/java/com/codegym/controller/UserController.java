@@ -1,12 +1,11 @@
 package com.codegym.controller;
 
+import com.codegym.model.dto.UserDTO;
 import com.codegym.model.dto.UserDetailDTO;
 import com.codegym.model.Email;
 import com.codegym.model.Role;
 import com.codegym.model.User;
-import com.codegym.model.dto.UserDTO;
 import com.codegym.model.dto.UpdatePasswordRequest;
-
 import com.codegym.payload.request.RegisterRequest;
 import com.codegym.payload.response.RegisterResponse;
 import com.codegym.repository.IUserRepository;
@@ -114,9 +113,8 @@ public class UserController {
             return ResponseEntity.notFound().build();
         }
     }
-
-    @GetMapping("user/{id}")
-    public ResponseEntity<?> getUserByUserName(@PathVariable("id") Long id){
+    @GetMapping("/user/{id}")
+    public ResponseEntity<?> getUserByUserName(@PathVariable("id") Long id ) {
         User user = userService.getUserById(id);
         if (user != null) {
             return ResponseEntity.ok(user);
@@ -130,11 +128,8 @@ public class UserController {
         return userService.searchUsers(username);
     }
 
-    @GetMapping("users/changepw/{username}")
-    public ResponseEntity<?> changePassword(@PathVariable("username") String username){
-
     @GetMapping("users/getpassword/{username}")
-    public ResponseEntity<?> changePassword(@PathVariable("username") String username ) {
+    public ResponseEntity<?> changePassword(@PathVariable("username") String username) {
         User user = userService.findByUserName(username);
         if (user == null) {
             Map<String, String> errorResponse = new HashMap<>();

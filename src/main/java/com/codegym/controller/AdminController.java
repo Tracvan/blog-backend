@@ -1,10 +1,7 @@
-
 package com.codegym.controller;
 
 import com.codegym.model.dto.UserDTO;
-
 import com.codegym.model.dto.UserDetailDTO;
-
 import com.codegym.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
