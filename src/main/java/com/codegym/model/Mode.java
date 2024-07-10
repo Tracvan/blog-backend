@@ -1,2 +1,3 @@
-package com.codegym.model;public class Mode {
+package com.codegym.model;
+public class Mode {
 }
