@@ -11,7 +11,8 @@ public class UserDTO {
     private String status;
 
 
-    public UserDTO() {}
+    public UserDTO() {
+    }
 
     public UserDTO(Long id, String username, LocalDate date, String avatar, String fullName, String status) {
         this.id = id;
@@ -38,12 +39,14 @@ public class UserDTO {
         this.username = username;
     }
 
+
     public LocalDate getDate() {
         return date;
     }
 
     public void setDate(LocalDate date) {
         this.date = date;
+
     }
 
     public String getAvatar() {
@@ -70,3 +73,4 @@ public class UserDTO {
         this.status = status;
     }
 }
+

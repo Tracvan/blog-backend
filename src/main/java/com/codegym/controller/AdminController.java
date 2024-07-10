@@ -18,8 +18,7 @@ public class AdminController {
     private IUserService userService;
 
     @GetMapping("/users")
-    public ResponseEntity<List<UserDTO>> getAllUsers() {
-        List<UserDTO> users = userService.getAllUsers();
+    public ResponseEntity<List<UserDTO>> getAllUsers() {List<UserDTO> users = userService.getAllUsers();
         return ResponseEntity.ok(users);
     }
 
@@ -42,6 +41,7 @@ public class AdminController {
         userService.remove(id);
         return ResponseEntity.ok("User deleted successfully");
     }
+
     @GetMapping("/users/{id}")
     public ResponseEntity<UserDetailDTO> getUserDetailById(@PathVariable Long id) {
         UserDetailDTO userDetail = userService.getUserDetailById(id);
