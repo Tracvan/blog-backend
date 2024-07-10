@@ -35,5 +35,6 @@ public interface IUserService {
 
 
     List<User> searchUsers(String query);
+    UserDetailDTO getCurrentUser();
 
 }
