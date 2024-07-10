@@ -12,7 +12,6 @@ import java.util.Optional;
 
 public interface IUserService {
     InfoUser getInfoUser(Long id);
-
     List<User> getUsers();
     User getUserById(Long userId);
     void save(User user);
@@ -30,4 +29,5 @@ public interface IUserService {
 
 
     List<User> searchUsers(String query);
+     UserDetailDTO getCurrentUser();
 }

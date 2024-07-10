@@ -2,6 +2,7 @@ package com.codegym.repository;
 
 import com.codegym.model.InfoUser;
 
+import com.codegym.model.User;
 import com.codegym.model.dto.UserDetailDTO;
 import com.codegym.model.dto.UserDTO;
 
@@ -37,5 +38,7 @@ public interface InfoUserRepository extends JpaRepository<InfoUser, Long> {
 
     @Query("SELECT new com.codegym.model.dto.UserDetailDTO(i.user.id, i.user.username, i.user.email, i.avatar, i.user.date, i.fullName, i.address, i.phonenumber, i.status) FROM InfoUser i WHERE i.user.id = :id")
     UserDetailDTO findUserDetailById(Long id);
+
+
 }
 
