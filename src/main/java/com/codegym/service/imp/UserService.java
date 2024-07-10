@@ -100,8 +100,8 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public List<User> searchUsers(String query) {
-        return null;
+    public List<UserDetailDTO> searchUsers(String username) {
+        return infoUserRepository.searchUsers(username);
     }
 
     @Override

@@ -132,11 +132,6 @@ public class UserController {
         }
     }
 
-    @GetMapping("/search/{username}")
-    public List<User> searchUsers(@PathVariable("username") String username) {
-        return userService.searchUsers(username);
-    }
-
     @GetMapping("users/getpassword/{username}")
     public ResponseEntity<?> changePassword(@PathVariable("username") String username) {
         User user = userService.findByUserName(username);

@@ -34,7 +34,10 @@ public interface IUserService {
     void updateUserProfile(Long id, UserProfileUpdateDTO userProfileUpdateDTO);
 
 
-    List<User> searchUsers(String query);
+
+    List<UserDetailDTO> searchUsers(String username);
+
+
     UserDetailDTO getCurrentUser();
 
 }
