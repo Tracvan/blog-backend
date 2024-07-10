@@ -2,6 +2,7 @@ package com.codegym.repository;
 
 import com.codegym.model.InfoUser;
 
+import com.codegym.model.User;
 import com.codegym.model.dto.UserDetailDTO;
 import com.codegym.model.dto.UserDTO;
 import com.codegym.model.dto.UserProfileUpdateDTO;

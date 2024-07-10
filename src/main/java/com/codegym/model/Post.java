@@ -14,6 +14,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalTime;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -28,6 +29,7 @@ public class Post {
     private String content;
     private String image;
     private LocalTime Date;
+
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;

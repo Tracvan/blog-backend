@@ -10,19 +10,25 @@ import com.codegym.model.dto.UserProfileUpdateDTO;
 import com.codegym.repository.IUserRepository;
 import com.codegym.repository.InfoUserRepository;
 import com.codegym.service.IUserService;
+import com.codegym.service.InfoUserService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 import java.util.stream.Collectors;
 
 @Service
 public class UserService implements IUserService {
     private final PasswordEncoder passwordEncoder;
+    @Autowired
+    InfoUserService infoUserService;
 
 
     @Autowired
@@ -65,6 +71,7 @@ public class UserService implements IUserService {
         return userRepository.findUserByUsername(username);
     }
 
+
     @Override
     public String generateNewPassword() {
         String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -95,6 +102,20 @@ public class UserService implements IUserService {
     @Override
     public List<User> searchUsers(String query) {
         return null;
+    }
+
+    @Override
+    public UserDetailDTO getCurrentUser() {
+        Object principal = SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getPrincipal();
+        UserDetails currentUser = (UserDetails) principal;
+        User user = new User();
+        BeanUtils.copyProperties(findByUserName(currentUser.getUsername()),user);
+        UserDetailDTO userDetailDTO = new UserDetailDTO();
+        userDetailDTO = infoUserService.findInfoUserByUser(user);
+        return userDetailDTO;
     }
 
 
