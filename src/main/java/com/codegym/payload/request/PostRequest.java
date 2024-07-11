@@ -29,7 +29,6 @@ public class PostRequest {
     private String image;
     @NotBlank
 
-
     @NotBlank
     private String title;
 
