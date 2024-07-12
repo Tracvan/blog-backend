@@ -12,5 +12,8 @@ public interface IPostService {
     void createPost(Post post);
     UserDetailDTO getUserDetailByUser(User user);
     List<PostDTO> getAllPostInfo();
-    PostDTO getPostById(Long id);
+    PostDTO getPostDTOById(Long id);
+    Post getPostById(Long id);
+    void savePost(Post post);
+
 }

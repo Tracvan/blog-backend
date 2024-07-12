@@ -11,7 +11,6 @@ import com.codegym.payload.request.RegisterRequest;
 import com.codegym.payload.response.RegisterResponse;
 import com.codegym.repository.IUserRepository;
 import com.codegym.repository.RoleRepository;
-import com.codegym.security.JwtTokenProvider;
 import com.codegym.service.IUserService;
 import com.codegym.service.InfoUserService;
 import com.codegym.service.imp.EmailService;
@@ -52,8 +51,7 @@ public class UserController {
     @Autowired
     PasswordEncoder passwordEncoder;
 
-    @Autowired
-    JwtTokenProvider tokenProvider;
+
 
     @Autowired
     InfoUserService infoUserService;
@@ -226,7 +224,6 @@ public class UserController {
         List<UserDTO> users = userService.getAllUsers();
         return ResponseEntity.ok(users);
     }
-
 
     @GetMapping("/users/profile/{userId}")
     public ResponseEntity<UserProfileUpdateDTO> getUserProfileUpdateDTO(@PathVariable Long userId) {
