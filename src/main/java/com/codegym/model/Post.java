@@ -1,6 +1,8 @@
 package com.codegym.model;
 
+import com.codegym.model.dto.CommentDTO;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -32,6 +34,8 @@ import java.util.List;
 @Getter
 @Entity
 @Setter
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+
 
 public class Post {
     @Id
@@ -55,7 +59,6 @@ public class Post {
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments;
 
-
     public Post(String title, LocalDate time, String content, String image, String description, Mode mode, User user, List<Comment> comments ) {
         this.title = title;
         this.time = time;
@@ -65,5 +68,16 @@ public class Post {
         this.mode = mode;
         this.user = user;
         this.comments = comments;
+    }
+
+    public Post(Long id, String title, LocalDate time, String content, String image, String description, Mode mode, User user) {
+        this.id = id;
+        this.title = title;
+        this.time = time;
+        this.content = content;
+        this.image = image;
+        this.description = description;
+        this.mode = mode;
+        this.user = user;
     }
 }

@@ -42,11 +42,12 @@ public class PostService implements IPostService {
             Mode mode = postList.get(i).getMode();
             List<Comment> comments = postList.get(i).getComments();
             List<CommentDTO> commentDTOList = new ArrayList<>();
-            for(var z = 0; z <comments.size(); z++) {
-                Long commentId = comments.get(i).getId();
-                String commentContent = comments.get(i).getContent();
-                LocalDate commentTime = comments.get(i).getTime();
-                User commentUser = comments.get(i).getUser();
+
+            for(var z = 0; z < comments.size(); z++) {
+                Long commentId = comments.get(z).getId();
+                String commentContent = comments.get(z).getContent();
+                LocalDate commentTime = comments.get(z).getTime();
+                User commentUser = comments.get(z).getUser();
                 UserDetailDTO commentUserDetailDTO = userService.getUserDetailById(commentUser.getId());
                 String commentAvatar = commentUserDetailDTO.getAvatar();
                 String commentUsername= commentUserDetailDTO.getUsername();
@@ -63,7 +64,7 @@ public class PostService implements IPostService {
     }
 
     @Override
-    public PostDTO getPostById(Long id) {
+    public PostDTO getPostDTOById(Long id) {
         Post post = postRepository.findById(id).get();
         Long userId = post.getUser().getId();
         Long postId = post.getId();
@@ -91,6 +92,16 @@ public class PostService implements IPostService {
         String username = userDetailDTO.getUsername();
         PostDTO postDTO = new PostDTO(postId,title,time, content,image,description,mode,userAvatar,username,commentDTOList );
         return postDTO;
+    }
+
+    @Override
+    public Post getPostById(Long id) {
+        return postRepository.findById(id).get();
+    }
+
+    @Override
+    public void savePost(Post post) {
+        postRepository.save(post);
     }
 
     @Autowired

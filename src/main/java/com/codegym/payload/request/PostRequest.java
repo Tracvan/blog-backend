@@ -35,4 +35,5 @@ public class PostRequest {
     @NotNull
     private Long mode_id;
 
+
 }
