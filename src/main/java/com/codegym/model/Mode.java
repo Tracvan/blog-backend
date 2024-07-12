@@ -1,8 +1,5 @@
 package com.codegym.model;
 
-public class Mode {
-
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -22,9 +19,11 @@ import lombok.Setter;
 @Setter
 @Entity
 public class Mode {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String name;
+
 
 }

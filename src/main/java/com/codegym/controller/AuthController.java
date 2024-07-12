@@ -44,8 +44,6 @@ public class AuthController {
     JwtTokenProvider tokenProvider;
 
 
-
-
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest loginRequest) {
         try {
