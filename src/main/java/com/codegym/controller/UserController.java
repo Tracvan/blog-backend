@@ -1,5 +1,6 @@
 package com.codegym.controller;
 
+import com.codegym.model.InfoUser;
 import com.codegym.model.dto.UserDTO;
 import com.codegym.model.Email;
 import com.codegym.model.Role;
@@ -48,6 +49,7 @@ public class UserController {
     @Autowired
     private RoleRepository roleRepository;
 
+
     @Autowired
     PasswordEncoder passwordEncoder;
 
@@ -78,6 +80,14 @@ public class UserController {
         user.setRoles(Collections.singleton(userRole));
 
         userService.save(user);
+        Long userId = userService.findByUserName(user.getUsername()).getId();
+        User newUser = userService.getUserById(userId);
+        LocalDate time = LocalDate.now();
+
+        InfoUser infoUser = new InfoUser( newUser, "",  "",  newUser.getUsername(),  "Active");
+
+        infoUserService.save(infoUser);
+
         Email email = new Email(user.getEmail(),
                 "Welcome to the Blogosphere, " +user.getUsername() + "! ",
                 "Hey " + user.getUsername() +

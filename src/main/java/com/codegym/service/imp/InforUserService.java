@@ -29,5 +29,10 @@ public class InforUserService implements InfoUserService {
         return infoUserRepository.findUserDetailById(user.getId());
     }
 
+    @Override
+    public void save(InfoUser infoUser) {
+        infoUserRepository.save(infoUser);
+    }
+
 
 }

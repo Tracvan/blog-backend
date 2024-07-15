@@ -7,6 +7,7 @@ import com.codegym.model.dto.UpdatePasswordRequest;
 import com.codegym.model.dto.UserDTO;
 import com.codegym.model.dto.UserDetailDTO;
 import com.codegym.model.dto.UserProfileUpdateDTO;
+import com.codegym.payload.request.RegisterRequest;
 
 import java.util.List;
 import java.util.Optional;
@@ -40,4 +41,5 @@ public interface IUserService {
 
     UserDetailDTO getCurrentUser();
 
+    void registerUser(RegisterRequest registerRequest);
 }

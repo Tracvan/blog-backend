@@ -7,6 +7,7 @@ import com.codegym.model.dto.UpdatePasswordRequest;
 import com.codegym.model.dto.UserDTO;
 import com.codegym.model.dto.UserDetailDTO;
 import com.codegym.model.dto.UserProfileUpdateDTO;
+import com.codegym.payload.request.RegisterRequest;
 import com.codegym.repository.IUserRepository;
 import com.codegym.repository.InfoUserRepository;
 import com.codegym.service.IUserService;
@@ -118,6 +119,10 @@ public class UserService implements IUserService {
         return userDetailDTO;
     }
 
+    @Override
+    public void registerUser(RegisterRequest registerRequest) {
+
+    }
 
 
     @Override
