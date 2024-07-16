@@ -9,6 +9,7 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -25,5 +26,8 @@ public class PostDTO {
     private String userAvatar;
     private String username;
     private List<CommentDTO> commentsDTO;
+    private Set<String> tags;
 
+    public PostDTO(Long id, String title, LocalDate time, String content, String image, String description, Mode mode, String userAvatar, String username, List<CommentDTO> commentDTOList) {
+    }
 }

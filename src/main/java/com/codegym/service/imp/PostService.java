@@ -8,6 +8,7 @@ import com.codegym.model.dto.CommentDTO;
 import com.codegym.model.dto.PostDTO;
 import com.codegym.model.dto.UserDetailDTO;
 import com.codegym.repository.IPostRepository;
+import com.codegym.repository.ITagRepository;
 import com.codegym.service.IPostService;
 import com.codegym.service.IUserService;
 import com.codegym.service.InfoUserService;
@@ -24,6 +25,9 @@ public class PostService implements IPostService {
     IPostRepository postRepository;
     @Autowired
     IUserService userService;
+    @Autowired
+    private ITagRepository tagRepository;
+
     @Override
     public List<PostDTO> getAllPostInfo() {
         List<Post> postList = postRepository.findAll();

@@ -1,14 +1,12 @@
 package com.codegym.controller;
 
-import com.codegym.model.Comment;
-import com.codegym.model.Mode;
-import com.codegym.model.Post;
-import com.codegym.model.User;
+import com.codegym.model.*;
 import com.codegym.model.dto.PostDTO;
 import com.codegym.model.dto.UserDetailDTO;
 import com.codegym.payload.request.PostRequest;
 import com.codegym.payload.response.RegisterResponse;
 import com.codegym.repository.IPostRepository;
+import com.codegym.repository.ITagRepository;
 import com.codegym.repository.IUserRepository;
 import com.codegym.service.IModeService;
 import com.codegym.service.IPostService;
@@ -38,7 +36,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/")
@@ -55,6 +55,8 @@ public class PostController {
     IModeService modeService;
     @Autowired
     InfoUserService infoUserService;
+    @Autowired
+    ITagRepository tagRepository;
 
     @PostMapping("/posts")
     public ResponseEntity<?> doPost(@RequestBody PostRequest postRequest) {
@@ -68,6 +70,18 @@ public class PostController {
         User user = userService.getUserById(userDetailDTO1.getId());
         List<Comment> comments = new ArrayList<>();
         Post post = new Post(title, time, content, image, description, mode, user, comments);
+
+        Set<Tag> tags = new HashSet<>();
+        for (String tagName : postRequest.getTags()) {
+            Tag tag = tagRepository.findByName(tagName).orElseGet(() -> {
+                Tag newTag = new Tag();
+                newTag.setName(tagName);
+                return tagRepository.save(newTag);
+            });
+            tags.add(tag);
+        }
+        post.setTags(tags);
+
         postRepository.save(post);
         return ResponseEntity.ok(new RegisterResponse("Post has been posted successfully"));
     }
@@ -97,6 +111,18 @@ public class PostController {
         Post post = postService.getPostById(id);
         List<Comment> comments = post.getComments();
         Post newPost = new Post(postId, title, time, content, image, description, mode, user, comments);
+
+        Set<Tag> tags = new HashSet<>();
+        for (String tagName : postRequest.getTags()) {
+            Tag tag = tagRepository.findByName(tagName).orElseGet(() -> {
+                Tag newTag = new Tag();
+                newTag.setName(tagName);
+                return tagRepository.save(newTag);
+            });
+            tags.add(tag);
+        }
+        post.setTags(tags);
+
         postService.savePost(newPost);
         return ResponseEntity.ok("Post have been updated");
     }

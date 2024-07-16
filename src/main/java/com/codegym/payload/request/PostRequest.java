@@ -13,6 +13,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.lang.Nullable;
 
 import java.time.LocalDate;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -35,5 +36,5 @@ public class PostRequest {
     @NotNull
     private Long mode_id;
 
-
+    private Set<String> tags;
 }
