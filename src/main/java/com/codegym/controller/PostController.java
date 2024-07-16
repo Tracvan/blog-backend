@@ -5,6 +5,7 @@ import com.codegym.model.Mode;
 import com.codegym.model.Post;
 import com.codegym.model.User;
 import com.codegym.model.dto.PostDTO;
+import com.codegym.model.dto.UserDTO;
 import com.codegym.model.dto.UserDetailDTO;
 import com.codegym.payload.request.PostRequest;
 import com.codegym.payload.response.RegisterResponse;
@@ -28,14 +29,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.awt.print.Pageable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -97,7 +101,39 @@ public class PostController {
         Post post = postService.getPostById(id);
         List<Comment> comments = post.getComments();
         Post newPost = new Post(postId, title, time, content, image, description, mode, user, comments);
-        postService.savePost(newPost);
-        return ResponseEntity.ok("Post have been updated");
+
+        Long postUserId = post.getUser().getId();
+        Long editingUserId = userService.getCurrentUser().getId();
+        if(postUserId.equals(editingUserId)) {
+            postService.savePost(newPost);
+            return ResponseEntity.ok(newPost);
+
+        }else{
+           return ResponseEntity.ofNullable("Authorize exception");
+        }
+
     }
+    @DeleteMapping("/posts/{id}")
+    public ResponseEntity<?> deletePost(@PathVariable("id") Long id){
+        Post post = postService.getPostById(id);
+        Long postUserId = post.getUser().getId();
+        Long editingUserId = userService.getCurrentUser().getId();
+        if(postUserId.equals(editingUserId)) {
+        postService.deletePost(id);
+            return ResponseEntity.ok("Post has been deleted");
+        }
+        return ResponseEntity.ofNullable("Authorize exception");
+    }
+    @GetMapping("/posts/public")
+    public ResponseEntity<?> getAllPublicPost(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "5") int size){
+        List<PostDTO> postDTOS = postService.getAllPublicPostInfo(page,5);
+        return ResponseEntity.ok(postDTOS);
+    }
+    @GetMapping("/posts/users")
+    public ResponseEntity<?> getAllMyPost(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "5") int size){
+        List<PostDTO> myPostList = postService.getAllMyPost(page,5);
+        return ResponseEntity.ok(myPostList);
+    }
+
+
 }

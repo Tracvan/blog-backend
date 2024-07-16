@@ -39,5 +39,5 @@ public interface IUserService {
 
 
     UserDetailDTO getCurrentUser();
-
+    UserDetailDTO getUserDetailDTOByUsername(String username);
 }

@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -20,7 +22,7 @@ public class InfoUser {
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
-    private String createdAt;
+    private LocalDate createdAt;
     private String avatar;
     private String fullName;
     private String address;

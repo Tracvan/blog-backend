@@ -113,11 +113,17 @@ public class UserService implements IUserService {
         UserDetails currentUser = (UserDetails) principal;
         User user = new User();
         BeanUtils.copyProperties(findByUserName(currentUser.getUsername()),user);
-        UserDetailDTO userDetailDTO = new UserDetailDTO();
+        UserDetailDTO userDetailDTO;
         userDetailDTO = infoUserService.findInfoUserByUser(user);
         return userDetailDTO;
     }
 
+    @Override
+    public UserDetailDTO getUserDetailDTOByUsername(String username) {
+        User user = userRepository.findUserByUsername(username);
+        UserDetailDTO userDetailDTO = getUserDetailById(user.getId());
+        return userDetailDTO;
+    }
 
 
     @Override

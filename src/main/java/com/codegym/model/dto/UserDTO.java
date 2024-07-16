@@ -14,6 +14,7 @@ public class UserDTO {
     public UserDTO() {
     }
 
+
     public UserDTO(Long id, String username, LocalDate date, String avatar, String fullName, String status) {
         this.id = id;
         this.username = username;

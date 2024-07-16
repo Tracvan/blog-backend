@@ -15,5 +15,8 @@ public interface IPostService {
     PostDTO getPostDTOById(Long id);
     Post getPostById(Long id);
     void savePost(Post post);
+    void deletePost(Long id);
+    List<PostDTO> getAllPublicPostInfo(int page, int size);
+    List<PostDTO> getAllMyPost(int page, int size);
 
 }

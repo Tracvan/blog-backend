@@ -25,5 +25,42 @@ public class PostDTO {
     private String userAvatar;
     private String username;
     private List<CommentDTO> commentsDTO;
+    private Boolean isOwner;
 
+    public PostDTO(Long id, String title, LocalDate time, String content, String image, String description, Mode mode, String username) {
+        this.id = id;
+        this.title = title;
+        this.time = time;
+        this.content = content;
+        this.image = image;
+        this.description = description;
+        this.mode = mode;
+        this.username = username;
+    }
+
+    public PostDTO(Long id, String title, LocalDate time, String content, String image, String description, Mode mode, String username, boolean isOwner) {
+        this.id = id;
+        this.title = title;
+        this.time = time;
+        this.content = content;
+        this.image = image;
+        this.description = description;
+        this.mode = mode;
+        this.username = username;
+        this.isOwner = isOwner;
+    }
+
+    public PostDTO(Long id, String title, LocalDate time, String content, String image, String description, Mode mode, String userAvatar, String username, List<CommentDTO> commentDTOList) {
+         this.id =id;
+         this.title = title;
+         this.time = time;
+         this.content = content;
+         this.image = image;
+         this.description = description;
+        this.mode =mode;
+        this.userAvatar = userAvatar;
+        this.username = username;
+        this.commentsDTO = commentDTOList;
+
+    }
 }

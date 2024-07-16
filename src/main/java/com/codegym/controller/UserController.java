@@ -78,6 +78,7 @@ public class UserController {
         user.setRoles(Collections.singleton(userRole));
 
         userService.save(user);
+
         Email email = new Email(user.getEmail(),
                 "Welcome to the Blogosphere, " +user.getUsername() + "! ",
                 "Hey " + user.getUsername() +

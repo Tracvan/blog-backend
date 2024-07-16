@@ -12,11 +12,13 @@ import com.codegym.service.IPostService;
 import com.codegym.service.IUserService;
 import com.codegym.service.InfoUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class PostService implements IPostService {
@@ -90,7 +92,12 @@ public class PostService implements IPostService {
         }
         String userAvatar = userDetailDTO.getAvatar();
         String username = userDetailDTO.getUsername();
-        PostDTO postDTO = new PostDTO(postId,title,time, content,image,description,mode,userAvatar,username,commentDTOList );
+        String currentUsername = userService.getCurrentUser().getUsername();
+        boolean isOwner = false;
+        if(currentUsername.equals(username)){
+            isOwner = true;
+        }
+        PostDTO postDTO = new PostDTO(postId,title,time, content,image,description,mode,userAvatar,username,commentDTOList,isOwner );
         return postDTO;
     }
 
@@ -103,6 +110,66 @@ public class PostService implements IPostService {
     public void savePost(Post post) {
         postRepository.save(post);
     }
+
+    @Override
+    public void deletePost(Long id) {
+        postRepository.deleteById(id);
+    }
+
+    @Override
+    public List<PostDTO> getAllPublicPostInfo(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        List<PostDTO> postDTOList = postRepository.getAllPublicPost(pageable);
+        for(var i =0; i < postDTOList.size(); i++){
+            String userDetailAvatar = userService.getUserDetailDTOByUsername(postDTOList.get(i).getUsername()).getAvatar();
+            postDTOList.get(i).setUserAvatar(userDetailAvatar);
+            List<CommentDTO> commentDTOList = new ArrayList<>();
+            Post post = postRepository.findById(postDTOList.get(i).getId()).get();
+            List<Comment> comments = post.getComments();
+            for(var z = 0; z <comments.size(); z++) {
+                Long commentId = comments.get(z).getId();
+                String commentContent = comments.get(z).getContent();
+                LocalDate commentTime = comments.get(z).getTime();
+                User commentUser = comments.get(z).getUser();
+                UserDetailDTO commentUserDetailDTO = userService.getUserDetailById(commentUser.getId());
+                String commentAvatar = commentUserDetailDTO.getAvatar();
+                String commentUsername= commentUserDetailDTO.getUsername();
+                CommentDTO commentDTO = new CommentDTO(commentId,commentContent,commentTime,commentAvatar,commentUsername);
+                commentDTOList.add(commentDTO);
+            }
+            postDTOList.get(i).setCommentsDTO(commentDTOList);
+        }
+        return  postDTOList;
+    }
+
+    @Override
+    public List<PostDTO> getAllMyPost(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        UserDetailDTO userDetailDTO = userService.getCurrentUser();
+        Long userId = userDetailDTO.getId();
+        List<PostDTO> myPostList = postRepository.getAllByUser(pageable,userId);
+        for(var i =0; i < myPostList.size(); i++){
+            String userDetailAvatar = userService.getUserDetailDTOByUsername(myPostList.get(i).getUsername()).getAvatar();
+            myPostList.get(i).setUserAvatar(userDetailAvatar);
+            List<CommentDTO> commentDTOList = new ArrayList<>();
+            Post post = postRepository.findById(myPostList.get(i).getId()).get();
+            List<Comment> comments = post.getComments();
+            for(var z = 0; z <comments.size(); z++) {
+                Long commentId = comments.get(z).getId();
+                String commentContent = comments.get(z).getContent();
+                LocalDate commentTime = comments.get(z).getTime();
+                User commentUser = comments.get(z).getUser();
+                UserDetailDTO commentUserDetailDTO = userService.getUserDetailById(commentUser.getId());
+                String commentAvatar = commentUserDetailDTO.getAvatar();
+                String commentUsername= commentUserDetailDTO.getUsername();
+                CommentDTO commentDTO = new CommentDTO(commentId,commentContent,commentTime,commentAvatar,commentUsername);
+                commentDTOList.add(commentDTO);
+            }
+            myPostList.get(i).setCommentsDTO(commentDTOList);
+        }
+        return  myPostList;
+    }
+
 
     @Autowired
     InfoUserService infoUserService;
