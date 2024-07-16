@@ -26,5 +26,15 @@ public class InfoUser {
     private String address;
     private String phonenumber;
     private String status;
+
+    public InfoUser(User user, String createdAt, String avatar, String fullName, String status){
+        this.user = user;
+        this.createdAt = createdAt;
+        this.avatar = avatar;
+        this.fullName = fullName;
+        this.status = status;
+
+    }
+
 }
 

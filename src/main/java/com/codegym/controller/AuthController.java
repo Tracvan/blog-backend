@@ -3,9 +3,12 @@ package com.codegym.controller;
 
 import com.codegym.model.dto.UserDetailDTO;
 import com.codegym.payload.request.LoginRequest;
+import com.codegym.payload.request.RegisterRequest;
 import com.codegym.payload.response.ForbiddenResponse;
 import com.codegym.payload.response.LoginResponse;
+import com.codegym.payload.response.RegisterResponse;
 import com.codegym.security.JwtTokenProvider;
+import com.codegym.service.IUserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -41,6 +44,9 @@ public class AuthController {
     PasswordEncoder passwordEncoder;
 
     @Autowired
+    private IUserService userService; // Thêm khai báo userService
+
+    @Autowired
     JwtTokenProvider tokenProvider;
 
 
@@ -70,5 +76,11 @@ public class AuthController {
         if (auth != null) {
             new SecurityContextLogoutHandler().logout(request, response, auth);
         }
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<RegisterResponse> registerUser(@RequestBody RegisterRequest registerRequest) {
+        userService.registerUser(registerRequest);
+        return ResponseEntity.ok(new RegisterResponse("User registered successfully"));
     }
 }
