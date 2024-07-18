@@ -129,10 +129,13 @@ public class PostController {
     }
 
     @GetMapping("/posts/search")
-    public ResponseEntity<?> getAllPostByTitle(@RequestParam(defaultValue = "0") int page,
-                                               @RequestParam(defaultValue = "5") int size,
-                                               @RequestParam String input) {
-        List<PostDTO> searchResult = postService.findPostByTitle(input, page, size);
+    public ResponseEntity<?> getAllPostByTitle(@RequestParam String input) {
+        List<PostDTO> searchResult = postService.findPostByTitle(input);
+        return ResponseEntity.ok(searchResult);
+    }
+    @GetMapping("/posts/users/search/")
+    public ResponseEntity<?> findMyPostByTitle(@RequestParam String input){
+        List<PostDTO> searchResult = postService.findMyPostByTitle(input);
         return ResponseEntity.ok(searchResult);
     }
 
