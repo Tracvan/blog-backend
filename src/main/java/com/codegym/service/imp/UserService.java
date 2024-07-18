@@ -1,29 +1,30 @@
 package com.codegym.service.imp;
-
 import com.codegym.model.InfoUser;
 import com.codegym.model.User;
 import com.codegym.model.dto.UpdatePasswordRequest;
-
 import com.codegym.model.dto.UserDTO;
 import com.codegym.model.dto.UserDetailDTO;
 import com.codegym.model.dto.UserProfileUpdateDTO;
+import com.codegym.payload.request.RegisterRequest;
 import com.codegym.repository.IUserRepository;
 import com.codegym.repository.InfoUserRepository;
 import com.codegym.service.IUserService;
+import com.codegym.service.InfoUserService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 import java.util.List;
 import java.util.Random;
-import java.util.stream.Collectors;
 
 @Service
 public class UserService implements IUserService {
     private final PasswordEncoder passwordEncoder;
-
+    @Autowired
+    InfoUserService infoUserService;
 
     @Autowired
     IUserRepository userRepository;
@@ -69,8 +70,6 @@ public class UserService implements IUserService {
     public String generateNewPassword() {
         String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         Random random = new Random();
-
-        // Chọn độ dài ngẫu nhiên từ 6 đến 8
         int length = random.nextInt(3) + 6;
 
         StringBuilder sb = new StringBuilder(length);
@@ -93,11 +92,34 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public List<User> searchUsers(String query) {
-        return null;
+    public List<UserDetailDTO> searchUsers(String username) {
+        return infoUserRepository.searchUsers(username);
     }
 
+    @Override
+    public UserDetailDTO getCurrentUser() {
+        Object principal = SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getPrincipal();
+        UserDetails currentUser = (UserDetails) principal;
+        User user = new User();
+        BeanUtils.copyProperties(findByUserName(currentUser.getUsername()),user);
+        UserDetailDTO userDetailDTO;
+        userDetailDTO = infoUserService.findInfoUserByUser(user);
+        return userDetailDTO;
+    }
 
+    @Override
+    public void registerUser(RegisterRequest registerRequest) {
+
+    }
+    @Override
+    public UserDetailDTO getUserDetailDTOByUsername(String username) {
+        User user = userRepository.findUserByUsername(username);
+        UserDetailDTO userDetailDTO = getUserDetailById(user.getId());
+        return userDetailDTO;
+    }
 
     @Override
     public void lockUser(Long id) {

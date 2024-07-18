@@ -7,9 +7,9 @@ import com.codegym.model.dto.UpdatePasswordRequest;
 import com.codegym.model.dto.UserDTO;
 import com.codegym.model.dto.UserDetailDTO;
 import com.codegym.model.dto.UserProfileUpdateDTO;
+import com.codegym.payload.request.RegisterRequest;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface IUserService {
     InfoUser getInfoUser(Long id);
@@ -33,7 +33,10 @@ public interface IUserService {
 
     void updateUserProfile(Long id, UserProfileUpdateDTO userProfileUpdateDTO);
 
+    List<UserDetailDTO> searchUsers(String username);
 
-    List<User> searchUsers(String query);
+    UserDetailDTO getCurrentUser();
 
+    void registerUser(RegisterRequest registerRequest);
+    UserDetailDTO getUserDetailDTOByUsername(String username);
 }

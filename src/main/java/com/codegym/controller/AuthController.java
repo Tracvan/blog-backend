@@ -1,11 +1,13 @@
 
 package com.codegym.controller;
 
-import com.codegym.model.dto.UserDetailDTO;
 import com.codegym.payload.request.LoginRequest;
+import com.codegym.payload.request.RegisterRequest;
 import com.codegym.payload.response.ForbiddenResponse;
 import com.codegym.payload.response.LoginResponse;
+import com.codegym.payload.response.RegisterResponse;
 import com.codegym.security.JwtTokenProvider;
+import com.codegym.service.IUserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -14,12 +16,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.config.annotation.web.saml2.LogoutResponseDsl;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.logout.LogoutSuccessEventPublishingLogoutHandler;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,8 +40,10 @@ public class AuthController {
     PasswordEncoder passwordEncoder;
 
     @Autowired
-    JwtTokenProvider tokenProvider;
+    private IUserService userService;
 
+    @Autowired
+    JwtTokenProvider tokenProvider;
 
 
     @PostMapping("/login")
@@ -71,5 +72,11 @@ public class AuthController {
         if (auth != null) {
             new SecurityContextLogoutHandler().logout(request, response, auth);
         }
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<RegisterResponse> registerUser(@RequestBody RegisterRequest registerRequest) {
+        userService.registerUser(registerRequest);
+        return ResponseEntity.ok(new RegisterResponse("User registered successfully"));
     }
 }

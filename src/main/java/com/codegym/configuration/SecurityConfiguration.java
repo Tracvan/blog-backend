@@ -88,6 +88,9 @@ public class SecurityConfiguration {
                         .requestMatchers("/api/userdetail/**").hasRole("ADMIN")
                         .requestMatchers("/api/info/**").permitAll()
                         .requestMatchers("/api/search/**").permitAll()
+                        .requestMatchers("/api/comments/**").permitAll()
+                        .requestMatchers("/api/posts/**").permitAll()
+
 
                         .anyRequest().authenticated());
 

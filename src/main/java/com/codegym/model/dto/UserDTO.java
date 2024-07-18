@@ -10,9 +10,9 @@ public class UserDTO {
     private String fullName;
     private String status;
 
-
     public UserDTO() {
     }
+
 
     public UserDTO(Long id, String username, LocalDate date, String avatar, String fullName, String status) {
         this.id = id;

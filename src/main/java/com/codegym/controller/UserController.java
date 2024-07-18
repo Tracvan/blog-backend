@@ -1,36 +1,33 @@
 package com.codegym.controller;
 
+import com.codegym.model.InfoUser;
 import com.codegym.model.dto.UserDTO;
-import com.codegym.model.dto.UserDetailDTO;
 import com.codegym.model.Email;
 import com.codegym.model.Role;
 import com.codegym.model.User;
 import com.codegym.model.dto.UserProfileUpdateDTO;
 import com.codegym.model.dto.UpdatePasswordRequest;
+import com.codegym.model.dto.UserDetailDTO;
 import com.codegym.payload.request.RegisterRequest;
 import com.codegym.payload.response.RegisterResponse;
 import com.codegym.repository.IUserRepository;
 import com.codegym.repository.RoleRepository;
-import com.codegym.security.JwtTokenProvider;
 import com.codegym.service.IUserService;
+import com.codegym.service.InfoUserService;
 import com.codegym.service.imp.EmailService;
 import jakarta.validation.Valid;
-import org.eclipse.angus.mail.iap.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
-
-
 import java.util.HashMap;
 import java.util.Map;
-
-
 
 @CrossOrigin(value = "*", maxAge = 3600)
 @RestController
@@ -51,7 +48,8 @@ public class UserController {
     PasswordEncoder passwordEncoder;
 
     @Autowired
-    JwtTokenProvider tokenProvider;
+    InfoUserService infoUserService;
+
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@Valid @RequestBody RegisterRequest registerRequest) {
         if(userRepository.existsByUsername(registerRequest.getUsername())) {
@@ -74,6 +72,14 @@ public class UserController {
         user.setRoles(Collections.singleton(userRole));
 
         userService.save(user);
+        Long userId = userService.findByUserName(user.getUsername()).getId();
+        User newUser = userService.getUserById(userId);
+        LocalDate time = LocalDate.now();
+
+        InfoUser infoUser = new InfoUser( newUser, now,  "",  newUser.getUsername(),  "Active");
+
+        infoUserService.save(infoUser);
+
         Email email = new Email(user.getEmail(),
                 "Welcome to the Blogosphere, " +user.getUsername() + "! ",
                 "Hey " + user.getUsername() +
@@ -106,7 +112,6 @@ public class UserController {
         return ResponseEntity.ok(new RegisterResponse("User registered successfully"));
     }
 
-
     @GetMapping("users/{username}")
     public ResponseEntity<?> getUserByUserName(@PathVariable("username") String username){
         User user = userService.findByUserName(username);
@@ -124,11 +129,6 @@ public class UserController {
         } else {
             return ResponseEntity.notFound().build();
         }
-    }
-
-    @GetMapping("/search/{username}")
-    public List<User> searchUsers(@PathVariable("username") String username) {
-        return userService.searchUsers(username);
     }
 
     @GetMapping("users/getpassword/{username}")
@@ -185,8 +185,37 @@ public class UserController {
     @PutMapping("/update-password")
     public ResponseEntity<?> updatePassword(@RequestBody UpdatePasswordRequest request){
         boolean isChanged = userService.changePassword(request);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailDTO user = userService.getCurrentUser();
+
         if(isChanged){
-             return ResponseEntity.ok().body("Password changed successfully");
+            LocalDate now = LocalDate.now();
+            Email email = new Email(user.getEmail(),
+                    "Your BLOG's Password Has Been Changed",
+                    "Hi " + user.getUsername() +
+            " This email confirms that your password for your BLOG account has been successfully changed.\n" +
+                            "\n" +
+                            "Here are the details of your password change:\n" +
+                            "\n" +
+                            "Date and Time: " + now + "\n" +
+                            "New Password: ******* (This is hidden for security reasons)\n" +
+                            "Important Security Reminder:\n" +
+                            "\n" +
+                            "We recommend that you choose a strong password that is at least 8 characters long and includes a mix of upper and lowercase letters, numbers, and symbols.\n" +
+                            "Do not use the same password for multiple accounts.\n" +
+                            "Be sure to keep your password in a safe place and do not share it with anyone.\n" +
+                            "If you did not make this change, please contact us immediately at Codegymsghn@gmail.com.\n" +
+                            "\n" +
+                            "We hope you continue to enjoy using BLOG.\n" +
+                            "\n" +
+                            "Sincerely,\n" +
+                            "\n" +
+                            "The BLOG Team"
+                    );
+            emailService.sendSimpleEmail(email.getTo(), email.getSubject(), email.getText());
+
+
+            return ResponseEntity.ok().body("Password changed successfully");
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("failed to change password");
         }
@@ -196,7 +225,6 @@ public class UserController {
         List<UserDTO> users = userService.getAllUsers();
         return ResponseEntity.ok(users);
     }
-
 
     @GetMapping("/users/profile/{userId}")
     public ResponseEntity<UserProfileUpdateDTO> getUserProfileUpdateDTO(@PathVariable Long userId) {
@@ -228,5 +256,10 @@ public class UserController {
         userService.unlockUser(id);
         return ResponseEntity.noContent().build();
 
+    }
+    @GetMapping("/currentUser")
+    public ResponseEntity<?> getCurrentUser(){
+       UserDetailDTO  userDetailDTO = userService.getCurrentUser();
+        return ResponseEntity.ok(userDetailDTO);
     }
 }

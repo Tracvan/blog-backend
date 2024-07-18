@@ -47,4 +47,9 @@ public class AdminController {
         UserDetailDTO userDetail = userService.getUserDetailById(id);
         return ResponseEntity.ok(userDetail);
     }
+
+    @GetMapping("/search/{username}")
+    public List<UserDetailDTO> searchUsers(@PathVariable("username") String username) {
+        return userService.searchUsers(username);
+    }
 }
