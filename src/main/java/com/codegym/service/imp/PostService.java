@@ -221,6 +221,32 @@ public class PostService implements IPostService {
         }
         return myPostList;
     }
+
+    @Override
+    public List<PostDTO> adminFindPost(String input) {
+        List<PostDTO> myPostList = postRepository.adminFindPost(input);
+        for(var i =0; i < myPostList.size(); i++){
+            String userDetailAvatar = userService.getUserDetailDTOByUsername(myPostList.get(i).getUsername()).getAvatar();
+            myPostList.get(i).setUserAvatar(userDetailAvatar);
+            List<CommentDTO> commentDTOList = new ArrayList<>();
+            Post post = postRepository.findById(myPostList.get(i).getId()).get();
+            List<Comment> comments = post.getComments();
+            for(var z = 0; z <comments.size(); z++) {
+                Long commentId = comments.get(z).getId();
+                String commentContent = comments.get(z).getContent();
+                LocalDate commentTime = comments.get(z).getTime();
+                User commentUser = comments.get(z).getUser();
+                UserDetailDTO commentUserDetailDTO = userService.getUserDetailById(commentUser.getId());
+                String commentAvatar = commentUserDetailDTO.getAvatar();
+                String commentUsername= commentUserDetailDTO.getUsername();
+                CommentDTO commentDTO = new CommentDTO(commentId,commentContent,commentTime,commentAvatar,commentUsername);
+                commentDTOList.add(commentDTO);
+            }
+            myPostList.get(i).setCommentsDTO(commentDTOList);
+        }
+        return  myPostList;
+    }
+
     @Override
     public void createPost(Post post) {
         postRepository.save(post);

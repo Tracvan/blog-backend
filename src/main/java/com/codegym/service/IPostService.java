@@ -20,4 +20,5 @@ public interface IPostService {
     List<PostDTO> getAllMyPost(int page, int size);
     List<PostDTO> findPostByTitle(String input);
     List<PostDTO> findMyPostByTitle( String input);
+    List<PostDTO> adminFindPost(String input);
 }
