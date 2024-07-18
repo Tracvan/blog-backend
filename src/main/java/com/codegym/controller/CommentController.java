@@ -3,8 +3,6 @@ package com.codegym.controller;
 import com.codegym.model.Comment;
 import com.codegym.model.Post;
 import com.codegym.model.User;
-import com.codegym.model.dto.PostDTO;
-import com.codegym.model.dto.UserDTO;
 import com.codegym.model.dto.UserDetailDTO;
 import com.codegym.payload.request.CommentRequest;
 import com.codegym.service.ICommentService;
@@ -17,7 +15,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import java.time.LocalDate;
 
 @RestController

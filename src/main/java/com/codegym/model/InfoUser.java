@@ -21,12 +21,21 @@ public class InfoUser {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
-
     private LocalDate createdAt;
     private String avatar;
     private String fullName;
     private String address;
     private String phonenumber;
     private String status;
+
+    public InfoUser(User user, LocalDate createdAt, String avatar, String fullName, String status){
+        this.user = user;
+        this.createdAt = createdAt;
+        this.avatar = avatar;
+        this.fullName = fullName;
+        this.status = status;
+
+    }
+
 }
 

@@ -8,8 +8,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.lang.Nullable;
 
-import java.time.LocalDate;
-
 @Getter
 @Setter
 @AllArgsConstructor

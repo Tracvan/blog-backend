@@ -1,6 +1,5 @@
 package com.codegym.model.dto;
 
-import com.codegym.model.Comment;
 import com.codegym.model.Mode;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -49,7 +48,6 @@ public class PostDTO {
         this.username = username;
         this.isOwner = isOwner;
     }
-
     public PostDTO(Long id, String title, LocalDate time, String content, String image, String description, Mode mode, String userAvatar, String username, List<CommentDTO> commentDTOList) {
          this.id =id;
          this.title = title;

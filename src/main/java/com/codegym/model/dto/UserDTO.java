@@ -10,7 +10,6 @@ public class UserDTO {
     private String fullName;
     private String status;
 
-
     public UserDTO() {
     }
 

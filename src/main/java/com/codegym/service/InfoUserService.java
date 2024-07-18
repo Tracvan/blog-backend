@@ -10,5 +10,6 @@ public interface InfoUserService {
     public  void updateInfoUser(InfoUser infoUser);
     UserDetailDTO findInfoUserByUser(User user);
 
+    void save(InfoUser infoUser);
 
 }

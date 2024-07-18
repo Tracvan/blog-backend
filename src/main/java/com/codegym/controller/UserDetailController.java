@@ -4,7 +4,6 @@ import com.codegym.model.InfoUser;
 import com.codegym.model.dto.UserDetailDTO;
 import com.codegym.service.InfoUserService;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;

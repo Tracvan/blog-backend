@@ -1,12 +1,11 @@
 package com.codegym.service.imp;
-
 import com.codegym.model.InfoUser;
 import com.codegym.model.User;
 import com.codegym.model.dto.UpdatePasswordRequest;
-
 import com.codegym.model.dto.UserDTO;
 import com.codegym.model.dto.UserDetailDTO;
 import com.codegym.model.dto.UserProfileUpdateDTO;
+import com.codegym.payload.request.RegisterRequest;
 import com.codegym.repository.IUserRepository;
 import com.codegym.repository.InfoUserRepository;
 import com.codegym.service.IUserService;
@@ -18,18 +17,14 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 import java.util.List;
-import java.util.Objects;
 import java.util.Random;
-import java.util.stream.Collectors;
 
 @Service
 public class UserService implements IUserService {
     private final PasswordEncoder passwordEncoder;
     @Autowired
     InfoUserService infoUserService;
-
 
     @Autowired
     IUserRepository userRepository;
@@ -71,13 +66,10 @@ public class UserService implements IUserService {
         return userRepository.findUserByUsername(username);
     }
 
-
     @Override
     public String generateNewPassword() {
         String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         Random random = new Random();
-
-        // Chọn độ dài ngẫu nhiên từ 6 đến 8
         int length = random.nextInt(3) + 6;
 
         StringBuilder sb = new StringBuilder(length);
@@ -119,12 +111,15 @@ public class UserService implements IUserService {
     }
 
     @Override
+    public void registerUser(RegisterRequest registerRequest) {
+
+    }
+    @Override
     public UserDetailDTO getUserDetailDTOByUsername(String username) {
         User user = userRepository.findUserByUsername(username);
         UserDetailDTO userDetailDTO = getUserDetailById(user.getId());
         return userDetailDTO;
     }
-
 
     @Override
     public void lockUser(Long id) {

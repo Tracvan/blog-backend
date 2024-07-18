@@ -17,8 +17,6 @@ public class InforUserService implements InfoUserService {
         return infoUserRepository.findUserDetailById(id);
     }
 
-
-
     @Override
     public void updateInfoUser(InfoUser infoUser) {
         infoUserRepository.save(infoUser);
@@ -27,6 +25,11 @@ public class InforUserService implements InfoUserService {
     @Override
     public UserDetailDTO findInfoUserByUser(User user) {
         return infoUserRepository.findUserDetailById(user.getId());
+    }
+
+    @Override
+    public void save(InfoUser infoUser) {
+        infoUserRepository.save(infoUser);
     }
 
 

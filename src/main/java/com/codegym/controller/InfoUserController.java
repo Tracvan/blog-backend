@@ -1,15 +1,11 @@
 package com.codegym.controller;
 
 import com.codegym.model.dto.UserDTO;
-
 import com.codegym.repository.InfoUserRepository;
 import com.codegym.repository.IUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/info")
@@ -37,6 +33,4 @@ public class InfoUserController {
                         .orElseGet(() -> ResponseEntity.notFound().build()))
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
-
-
 }
