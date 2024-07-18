@@ -20,7 +20,6 @@ public interface InfoUserRepository extends JpaRepository<InfoUser, Long> {
 
 
     @Query("SELECT new com.codegym.model.dto.UserDTO(i.user.id, i.user.username, i.user.date, i.avatar, i.fullName, i.status) FROM InfoUser i")
-
     List<UserDTO> findAllUsers();
     @Modifying
     @Transactional

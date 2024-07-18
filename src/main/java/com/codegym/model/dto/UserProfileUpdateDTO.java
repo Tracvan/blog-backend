@@ -5,7 +5,6 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 
 public class UserProfileUpdateDTO {
-
     private Long id;
     private String username;
 
@@ -24,7 +23,8 @@ public class UserProfileUpdateDTO {
     @Pattern(regexp = "^\\+?[0-9]{7,15}$", message = "Phone number is invalid")
     private String phoneNumber;
 
-    public UserProfileUpdateDTO() {}
+    public UserProfileUpdateDTO() {
+    }
 
     public UserProfileUpdateDTO(Long id, String username, String email, String avatar, String fullName, String address, String phoneNumber) {
         this.id = id;

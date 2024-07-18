@@ -14,26 +14,16 @@ import com.codegym.service.IModeService;
 import com.codegym.service.IPostService;
 import com.codegym.service.IUserService;
 import com.codegym.service.InfoUserService;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.lang.Nullable;
-import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
@@ -71,11 +61,13 @@ public class PostController {
         postRepository.save(post);
         return ResponseEntity.ok(new RegisterResponse("Post has been posted successfully"));
     }
+
     @GetMapping("/posts")
     public ResponseEntity<?> getAllPost() {
         List<PostDTO> postList = postService.getAllPostInfo();
         return ResponseEntity.ok(postList);
     }
+
     @GetMapping("/posts/{id}")
     public ResponseEntity<?> getPost(@PathVariable("id") Long id) {
         PostDTO postDTO = postService.getPostDTOById(id);
@@ -91,13 +83,57 @@ public class PostController {
         String content = postRequest.getContent();
         String image = postRequest.getImage();
         String description = postRequest.getDescription();
-        Mode mode = modeService.findModeById( postRequest.getMode_id() );
+        Mode mode = modeService.findModeById(postRequest.getMode_id());
         Long userId = userService.getCurrentUser().getId();
         User user = userService.getUserById(userId);
         Post post = postService.getPostById(id);
         List<Comment> comments = post.getComments();
         Post newPost = new Post(postId, title, time, content, image, description, mode, user, comments);
-        postService.savePost(newPost);
-        return ResponseEntity.ok("Post have been updated");
+
+        Long postUserId = post.getUser().getId();
+        Long editingUserId = userService.getCurrentUser().getId();
+        if (postUserId.equals(editingUserId)) {
+            postService.savePost(newPost);
+            return ResponseEntity.ok(newPost);
+
+        } else {
+            return ResponseEntity.ofNullable("Authorize exception");
+        }
+
     }
+
+    @DeleteMapping("/posts/{id}")
+    public ResponseEntity<?> deletePost(@PathVariable("id") Long id) {
+        Post post = postService.getPostById(id);
+        Long postUserId = post.getUser().getId();
+        Long editingUserId = userService.getCurrentUser().getId();
+        if (postUserId.equals(editingUserId)) {
+            postService.deletePost(id);
+            return ResponseEntity.ok("Post has been deleted");
+        }
+        return ResponseEntity.ofNullable("Authorize exception");
+    }
+
+    @GetMapping("/posts/public")
+    public ResponseEntity<?> getAllPublicPost(@RequestParam(defaultValue = "0") int page,
+                                              @RequestParam(defaultValue = "5") int size) {
+        List<PostDTO> postDTOS = postService.getAllPublicPostInfo(page, size);
+        return ResponseEntity.ok(postDTOS);
+    }
+
+    @GetMapping("/posts/users")
+    public ResponseEntity<?> getAllMyPost(@RequestParam(defaultValue = "0") int page,
+                                          @RequestParam(defaultValue = "5") int size) {
+        List<PostDTO> myPostList = postService.getAllMyPost(page, size);
+        return ResponseEntity.ok(myPostList);
+    }
+
+    @GetMapping("/posts/search")
+    public ResponseEntity<?> getAllPostByTitle(@RequestParam(defaultValue = "0") int page,
+                                               @RequestParam(defaultValue = "5") int size,
+                                               @RequestParam String input) {
+        List<PostDTO> searchResult = postService.findPostByTitle(input, page, size);
+        return ResponseEntity.ok(searchResult);
+    }
+
 }

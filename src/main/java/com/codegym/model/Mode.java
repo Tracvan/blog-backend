@@ -19,7 +19,6 @@ import lombok.Setter;
 @Setter
 @Entity
 public class Mode {
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;

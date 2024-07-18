@@ -23,16 +23,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
-
-
 import java.util.HashMap;
 import java.util.Map;
-
-
 
 @CrossOrigin(value = "*", maxAge = 3600)
 @RestController
@@ -49,11 +44,8 @@ public class UserController {
     @Autowired
     private RoleRepository roleRepository;
 
-
     @Autowired
     PasswordEncoder passwordEncoder;
-
-
 
     @Autowired
     InfoUserService infoUserService;
@@ -84,7 +76,7 @@ public class UserController {
         User newUser = userService.getUserById(userId);
         LocalDate time = LocalDate.now();
 
-        InfoUser infoUser = new InfoUser( newUser, "",  "",  newUser.getUsername(),  "Active");
+        InfoUser infoUser = new InfoUser( newUser, now,  "",  newUser.getUsername(),  "Active");
 
         infoUserService.save(infoUser);
 
@@ -119,7 +111,6 @@ public class UserController {
 
         return ResponseEntity.ok(new RegisterResponse("User registered successfully"));
     }
-
 
     @GetMapping("users/{username}")
     public ResponseEntity<?> getUserByUserName(@PathVariable("username") String username){
@@ -271,7 +262,4 @@ public class UserController {
        UserDetailDTO  userDetailDTO = userService.getCurrentUser();
         return ResponseEntity.ok(userDetailDTO);
     }
-
-
-
 }
