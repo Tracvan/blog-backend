@@ -18,5 +18,6 @@ public interface IPostService {
     void deletePost(Long id);
     List<PostDTO> getAllPublicPostInfo(int page, int size);
     List<PostDTO> getAllMyPost(int page, int size);
+    List<PostDTO> findPostByTitle(String input, int page, int size);
 
 }
