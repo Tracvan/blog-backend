@@ -25,6 +25,7 @@ public class PostDTO {
     private String username;
     private List<CommentDTO> commentsDTO;
     private Boolean isOwner;
+    private Boolean isReacted;
 
     public PostDTO(Long id, String title, LocalDate time, String content, String image, String description, Mode mode, String username) {
         this.id = id;
@@ -37,7 +38,7 @@ public class PostDTO {
         this.username = username;
     }
 
-    public PostDTO(Long id, String title, LocalDate time, String content, String image, String description, Mode mode, String username, boolean isOwner) {
+    public PostDTO(Long id, String title, LocalDate time, String content, String image, String description, Mode mode, String username, boolean isOwner, boolean isReacted) {
         this.id = id;
         this.title = title;
         this.time = time;
@@ -47,6 +48,7 @@ public class PostDTO {
         this.mode = mode;
         this.username = username;
         this.isOwner = isOwner;
+        this.isReacted = isReacted;
     }
     public PostDTO(Long id, String title, LocalDate time, String content, String image, String description, Mode mode, String userAvatar, String username, List<CommentDTO> commentDTOList) {
          this.id =id;
@@ -60,5 +62,18 @@ public class PostDTO {
         this.username = username;
         this.commentsDTO = commentDTOList;
 
+    }
+
+    public PostDTO(Long postId, String title, LocalDate time, String content, String image, String description, Mode mode, String userAvatar, String username, List<CommentDTO> commentDTOList, boolean isOwner) {
+        this.id = postId;
+        this.title = title;
+        this.time = time;
+        this.content = content;
+        this.image = image;
+        this.description = description;
+        this.mode = mode;
+        this.userAvatar = userAvatar;
+        this.username = username;
+        this.isOwner = isOwner;
     }
 }

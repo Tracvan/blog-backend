@@ -90,6 +90,7 @@ public class SecurityConfiguration {
                         .requestMatchers("/api/search/**").permitAll()
                         .requestMatchers("/api/comments/**").permitAll()
                         .requestMatchers("/api/posts/**").permitAll()
+                        .requestMatchers("/api/react/**").permitAll()
 
 
                         .anyRequest().authenticated());

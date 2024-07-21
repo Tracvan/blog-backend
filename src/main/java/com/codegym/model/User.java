@@ -1,11 +1,13 @@
 package com.codegym.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.relational.core.sql.Like;
 
 import java.time.LocalDate;
 import java.util.Set;
@@ -40,6 +42,10 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
+
+    @JsonManagedReference
+    @OneToMany(mappedBy = "user")
+    private Set<React> likes;
 
     public User(String username, String email, String password, LocalDate date) {
         this.username = username;
