@@ -1,7 +1,5 @@
 package com.codegym.model;
 
-import com.codegym.model.dto.CommentDTO;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.CascadeType;
@@ -22,10 +20,11 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.relational.core.sql.Like;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -59,6 +58,11 @@ public class Post {
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments;
 
+    @JsonManagedReference
+    @OneToMany(mappedBy = "post")
+    private Set<React> likes;
+
+
     public Post(String title, LocalDate time, String content, String image, String description, Mode mode, User user, List<Comment> comments ) {
         this.title = title;
         this.time = time;
@@ -79,5 +83,17 @@ public class Post {
         this.description = description;
         this.mode = mode;
         this.user = user;
+    }
+
+    public Post(Long id, String title, LocalDate time, String content, String image, String description, Mode mode, User user, List<Comment> comments) {
+        this.id = id;
+        this.title = title;
+        this.time = time;
+        this.content = content;
+        this.image = image;
+        this.description = description;
+        this.mode = mode;
+        this.user = user;
+        this.comments = comments;
     }
 }

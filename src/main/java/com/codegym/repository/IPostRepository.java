@@ -24,4 +24,6 @@ public interface IPostRepository extends JpaRepository<Post, Long> {
     List<PostDTO> findByTitle( String title);
     @Query("SELECT new com.codegym.model.dto.PostDTO(p.id, p.title, p.time, p.content, p.image, p.description, p.mode, p.user.username) FROM Post p WHERE p.title LIKE %:title% AND p.user.username = :username ORDER BY p.time ASC")
     List<PostDTO> findMyPostByTitle(String title, String username);
+    @Query("SELECT new com.codegym.model.dto.PostDTO(p.id, p.title, p.time, p.content, p.image, p.description, p.mode, p.user.username ) FROM Post p where p.title LIKE %:title%  order by p.time ASC ")
+    List<PostDTO> adminFindPost( String title);
 }

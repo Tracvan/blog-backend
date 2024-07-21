@@ -62,12 +62,6 @@ public class PostController {
         return ResponseEntity.ok(new RegisterResponse("Post has been posted successfully"));
     }
 
-    @GetMapping("/posts")
-    public ResponseEntity<?> getAllPost() {
-        List<PostDTO> postList = postService.getAllPostInfo();
-        return ResponseEntity.ok(postList);
-    }
-
     @GetMapping("/posts/{id}")
     public ResponseEntity<?> getPost(@PathVariable("id") Long id) {
         PostDTO postDTO = postService.getPostDTOById(id);

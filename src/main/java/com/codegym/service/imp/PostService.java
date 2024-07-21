@@ -3,15 +3,18 @@ package com.codegym.service.imp;
 import com.codegym.model.Comment;
 import com.codegym.model.Mode;
 import com.codegym.model.Post;
+import com.codegym.model.React;
 import com.codegym.model.User;
 import com.codegym.model.dto.CommentDTO;
 import com.codegym.model.dto.PostDTO;
 import com.codegym.model.dto.UserDetailDTO;
 import com.codegym.repository.IPostRepository;
 import com.codegym.service.IPostService;
+import com.codegym.service.IReactService;
 import com.codegym.service.IUserService;
 import com.codegym.service.InfoUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -27,6 +30,10 @@ public class PostService implements IPostService {
     IUserService userService;
     @Autowired
     InfoUserService infoUserService;
+    @Autowired
+    IReactService reactService;
+    @Autowired
+    IPostService postService;
     @Override
     public List<PostDTO> getAllPostInfo() {
         List<Post> postList = postRepository.findAll();
@@ -98,7 +105,7 @@ public class PostService implements IPostService {
         if(currentUsername.equals(username)){
             isOwner = true;
         }
-        PostDTO postDTO = new PostDTO(postId,title,time, content,image,description,mode,userAvatar,username,commentDTOList,isOwner );
+        PostDTO postDTO = new PostDTO(postId, title, time, content, image, description, mode, userAvatar, username, commentDTOList, isOwner );
         return postDTO;
     }
 
@@ -126,6 +133,8 @@ public class PostService implements IPostService {
             postDTOList.get(i).setUserAvatar(userDetailAvatar);
             List<CommentDTO> commentDTOList = new ArrayList<>();
             Post post = postRepository.findById(postDTOList.get(i).getId()).get();
+            boolean isLike = reactService.checkIsLiked(postDTOList.get(i).getId());
+            postDTOList.get(i).setIsReacted(isLike);
             List<Comment> comments = post.getComments();
             for(var z = 0; z <comments.size(); z++) {
                 Long commentId = comments.get(z).getId();
@@ -221,6 +230,32 @@ public class PostService implements IPostService {
         }
         return myPostList;
     }
+
+    @Override
+    public List<PostDTO> adminFindPost(String input) {
+        List<PostDTO> myPostList = postRepository.adminFindPost(input);
+        for(var i =0; i < myPostList.size(); i++){
+            String userDetailAvatar = userService.getUserDetailDTOByUsername(myPostList.get(i).getUsername()).getAvatar();
+            myPostList.get(i).setUserAvatar(userDetailAvatar);
+            List<CommentDTO> commentDTOList = new ArrayList<>();
+            Post post = postRepository.findById(myPostList.get(i).getId()).get();
+            List<Comment> comments = post.getComments();
+            for(var z = 0; z <comments.size(); z++) {
+                Long commentId = comments.get(z).getId();
+                String commentContent = comments.get(z).getContent();
+                LocalDate commentTime = comments.get(z).getTime();
+                User commentUser = comments.get(z).getUser();
+                UserDetailDTO commentUserDetailDTO = userService.getUserDetailById(commentUser.getId());
+                String commentAvatar = commentUserDetailDTO.getAvatar();
+                String commentUsername= commentUserDetailDTO.getUsername();
+                CommentDTO commentDTO = new CommentDTO(commentId,commentContent,commentTime,commentAvatar,commentUsername);
+                commentDTOList.add(commentDTO);
+            }
+            myPostList.get(i).setCommentsDTO(commentDTOList);
+        }
+        return  myPostList;
+    }
+
     @Override
     public void createPost(Post post) {
         postRepository.save(post);
