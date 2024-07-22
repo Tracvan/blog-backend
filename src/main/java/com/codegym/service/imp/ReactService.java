@@ -3,14 +3,11 @@ package com.codegym.service.imp;
 import com.codegym.model.Post;
 import com.codegym.model.React;
 import com.codegym.model.User;
-import com.codegym.repository.IUserRepository;
 import com.codegym.repository.ReactRepository;
 import com.codegym.service.IPostService;
 import com.codegym.service.IReactService;
 import com.codegym.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -38,4 +35,11 @@ public class ReactService implements IReactService {
             return false;
         }
     }
+
+    @Override
+    public void deleteLiked(Post post, User user) {
+        React react = reactRepository.findByPostAndUser(post,user);
+        reactRepository.delete(react);
+    }
+
 }
