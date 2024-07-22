@@ -9,5 +9,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ReactRepository extends JpaRepository<React, Long> {
     long countByPostAndUser(Post post, User user);
+    React findByPostAndUser(Post post, User user);
 }
 
