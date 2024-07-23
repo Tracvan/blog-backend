@@ -1,6 +1,7 @@
 package com.codegym.model.dto;
 
 import com.codegym.model.Mode;
+import com.codegym.model.Tag;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,6 +27,8 @@ public class PostDTO {
     private List<CommentDTO> commentsDTO;
     private Boolean isOwner;
     private Boolean isReacted;
+    private List<Tag> tags;
+    private int reactQuantity;
 
     public PostDTO(Long id, String title, LocalDate time, String content, String image, String description, Mode mode, String username) {
         this.id = id;
@@ -74,6 +77,33 @@ public class PostDTO {
         this.mode = mode;
         this.userAvatar = userAvatar;
         this.username = username;
+        this.commentsDTO = commentDTOList;
         this.isOwner = isOwner;
+    }
+    public PostDTO(Long id, String title, LocalDate time, String content, String image, String description, Mode mode, String username, List<Tag> tags){
+        this.id = id;
+        this.title = title;
+        this.time = time;
+        this.content = content;
+        this.image = image;
+        this.description = description;
+        this.mode = mode;
+        this.username = username;
+        this.tags = tags;
+    }
+
+    public PostDTO(Long id, String title, LocalDate time, String content, String image, String description, Mode mode, String username, Boolean isReacted) {
+        this.id = id;
+        this.title = title;
+        this.time = time;
+        this.content = content;
+        this.image = image;
+        this.description = description;
+        this.mode = mode;
+        this.username = username;
+        this.commentsDTO = commentsDTO;
+        this.isOwner = isOwner;
+        this.isReacted = isReacted;
+        this.tags = tags;
     }
 }

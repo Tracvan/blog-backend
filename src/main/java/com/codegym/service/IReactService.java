@@ -9,4 +9,5 @@ public interface IReactService {
     void createLike(React react);
     boolean checkIsLiked(Long postId);
     void deleteLiked(Post post, User user);
+    int countReact(Post post);
 }

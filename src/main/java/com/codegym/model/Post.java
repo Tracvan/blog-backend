@@ -5,10 +5,12 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
@@ -62,8 +64,14 @@ public class Post {
     @OneToMany(mappedBy = "post")
     private Set<React> likes;
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "post_tag",
+            joinColumns = @JoinColumn(name = "post_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id"))
+    private List<Tag> tags;
 
-    public Post(String title, LocalDate time, String content, String image, String description, Mode mode, User user, List<Comment> comments ) {
+    public Post(String title, LocalDate time, String content, String image, String description, Mode mode, User user, List<Comment> comments, List<Tag> tags ) {
         this.title = title;
         this.time = time;
         this.content = content;
@@ -72,6 +80,7 @@ public class Post {
         this.mode = mode;
         this.user = user;
         this.comments = comments;
+        this.tags = tags;
     }
 
     public Post(Long id, String title, LocalDate time, String content, String image, String description, Mode mode, User user) {
@@ -87,6 +96,16 @@ public class Post {
 
     public Post(Long id, String title, LocalDate time, String content, String image, String description, Mode mode, User user, List<Comment> comments) {
         this.id = id;
+        this.title = title;
+        this.time = time;
+        this.content = content;
+        this.image = image;
+        this.description = description;
+        this.mode = mode;
+        this.user = user;
+        this.comments = comments;
+    }
+    public Post(String title, LocalDate time,String content,String image, String description,Mode mode,User user,List<Comment> comments){
         this.title = title;
         this.time = time;
         this.content = content;

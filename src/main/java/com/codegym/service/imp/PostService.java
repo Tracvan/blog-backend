@@ -95,7 +95,7 @@ public class PostService implements IPostService {
            UserDetailDTO commentUserDetailDTO = userService.getUserDetailById(commentUser.getId());
            String commentAvatar = commentUserDetailDTO.getAvatar();
            String commentUsername= commentUserDetailDTO.getUsername();
-            CommentDTO commentDTO = new CommentDTO(commentId,commentContent,commentTime,commentAvatar,commentUsername);
+           CommentDTO commentDTO = new CommentDTO(commentId,commentContent,commentTime,commentAvatar,commentUsername);
             commentDTOList.add(commentDTO);
         }
         String userAvatar = userDetailDTO.getAvatar();
@@ -135,6 +135,8 @@ public class PostService implements IPostService {
             Post post = postRepository.findById(postDTOList.get(i).getId()).get();
             boolean isLike = reactService.checkIsLiked(postDTOList.get(i).getId());
             postDTOList.get(i).setIsReacted(isLike);
+            int reactQuantity = reactService.countReact(post);
+            postDTOList.get(i).setReactQuantity(reactQuantity);
             List<Comment> comments = post.getComments();
             for(var z = 0; z <comments.size(); z++) {
                 Long commentId = comments.get(z).getId();
@@ -163,6 +165,8 @@ public class PostService implements IPostService {
             myPostList.get(i).setUserAvatar(userDetailAvatar);
             List<CommentDTO> commentDTOList = new ArrayList<>();
             Post post = postRepository.findById(myPostList.get(i).getId()).get();
+            int reactQuantty = reactService.countReact(post);
+            myPostList.get(i).setReactQuantity(reactQuantty);
             List<Comment> comments = post.getComments();
             for(var z = 0; z <comments.size(); z++) {
                 Long commentId = comments.get(z).getId();
