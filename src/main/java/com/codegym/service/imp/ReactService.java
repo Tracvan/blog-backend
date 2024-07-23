@@ -42,4 +42,9 @@ public class ReactService implements IReactService {
         reactRepository.delete(react);
     }
 
+    @Override
+    public int countReact(Post post) {
+        return reactRepository.countAllByPost(post);
+    }
+
 }

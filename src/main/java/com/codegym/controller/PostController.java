@@ -81,7 +81,7 @@ public class PostController {
         Long userId = userService.getCurrentUser().getId();
         User user = userService.getUserById(userId);
         Post post = postService.getPostById(id);
-        List<Comment> comments = post.getComments();
+            List<Comment> comments = post.getComments();
         Post newPost = new Post(postId, title, time, content, image, description, mode, user, comments);
 
         Long postUserId = post.getUser().getId();
@@ -110,14 +110,14 @@ public class PostController {
 
     @GetMapping("/posts/public")
     public ResponseEntity<?> getAllPublicPost(@RequestParam(defaultValue = "0") int page,
-                                              @RequestParam(defaultValue = "5") int size) {
+                                              @RequestParam(defaultValue = "6") int size) {
         List<PostDTO> postDTOS = postService.getAllPublicPostInfo(page, size);
         return ResponseEntity.ok(postDTOS);
     }
 
     @GetMapping("/posts/users")
     public ResponseEntity<?> getAllMyPost(@RequestParam(defaultValue = "0") int page,
-                                          @RequestParam(defaultValue = "5") int size) {
+                                          @RequestParam(defaultValue = "6") int size) {
         List<PostDTO> myPostList = postService.getAllMyPost(page, size);
         return ResponseEntity.ok(myPostList);
     }

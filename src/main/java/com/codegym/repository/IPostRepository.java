@@ -14,6 +14,7 @@ import java.util.List;
 
 @Repository
 public interface IPostRepository extends JpaRepository<Post, Long> {
+
     @Query("SELECT new com.codegym.model.dto.PostDTO(p.id, p.title, p.time, p.content, p.image, p.description, p.mode, p.user.username) FROM Post p where p.mode.id = 1 order by p.id ASC ")
     List<PostDTO> getAllPublicPost(Pageable pageable);
 
