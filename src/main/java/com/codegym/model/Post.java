@@ -64,25 +64,6 @@ public class Post {
     @OneToMany(mappedBy = "post")
     private Set<React> likes;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "post_tag",
-            joinColumns = @JoinColumn(name = "post_id"),
-            inverseJoinColumns = @JoinColumn(name = "tag_id"))
-    private List<Tag> tags;
-
-    public Post(String title, LocalDate time, String content, String image, String description, Mode mode, User user, List<Comment> comments, List<Tag> tags ) {
-        this.title = title;
-        this.time = time;
-        this.content = content;
-        this.image = image;
-        this.description = description;
-        this.mode = mode;
-        this.user = user;
-        this.comments = comments;
-        this.tags = tags;
-    }
-
     public Post(Long id, String title, LocalDate time, String content, String image, String description, Mode mode, User user) {
         this.id = id;
         this.title = title;

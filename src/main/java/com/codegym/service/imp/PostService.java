@@ -167,6 +167,8 @@ public class PostService implements IPostService {
             Post post = postRepository.findById(myPostList.get(i).getId()).get();
             int reactQuantty = reactService.countReact(post);
             myPostList.get(i).setReactQuantity(reactQuantty);
+            boolean isLike = reactService.checkIsLiked(myPostList.get(i).getId());
+            myPostList.get(i).setIsReacted(isLike);
             List<Comment> comments = post.getComments();
             for(var z = 0; z <comments.size(); z++) {
                 Long commentId = comments.get(z).getId();
