@@ -49,7 +49,7 @@ public class PostController {
     @PostMapping("/posts")
     public ResponseEntity<?> doPost(@RequestBody PostRequest postRequest) {
         String content = postRequest.getContent();
-        String title = postRequest.getTitle();  // Sửa lại đúng method
+        String title = postRequest.getTitle();
         String description = postRequest.getDescription();
         LocalDate time = LocalDate.now();
         Mode mode = modeService.findModeById(postRequest.getMode_id());

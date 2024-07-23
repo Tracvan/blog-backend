@@ -54,7 +54,8 @@ public class AuthController {
                     loginRequest.getPassword()));
             SecurityContextHolder.getContext().setAuthentication(authentication);
             String token = tokenProvider.generateToken(authentication);
-            return new ResponseEntity<>(new LoginResponse("Login success!", token, authentication.getAuthorities().stream().toList().get(0).toString()), HttpStatus.OK);
+            String status = userService.getCurrentUser().getStatus();
+            return new ResponseEntity<>(new LoginResponse(status, token, authentication.getAuthorities().stream().toList().get(0).toString()), HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(new LoginResponse("Login failed!", null,"hi"), HttpStatus.BAD_REQUEST);
